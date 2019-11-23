@@ -31,6 +31,8 @@ public class QueryRunner {
         
         // TODO - You will need to change the queries below to match your queries.
         
+        //Doug Test
+        
         // You will need to put your Project Application in the below variable
         
         this.m_projectTeamApplication="delicious_business";    // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
