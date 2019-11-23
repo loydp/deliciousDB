@@ -10,6 +10,7 @@ public class Test {
         //Doug Test 2
         //This could be a conflict
         //This is a conflict
+        //Here is another conflict
     }
 
 }
