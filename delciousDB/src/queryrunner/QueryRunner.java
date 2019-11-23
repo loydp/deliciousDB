@@ -10,6 +10,8 @@ package queryrunner;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// TODO I think the Scanner here is for the console version.
+
 /**
  * 
  * QueryRunner takes a list of Queries that are initialized in it's constructor
@@ -32,6 +34,8 @@ public class QueryRunner {
         // TODO - You will need to change the queries below to match your queries.
         
         //Doug Test
+        
+        // Commit conflict test.
         
         // You will need to put your Project Application in the below variable
         
