@@ -24,125 +24,38 @@ public class DeliciousBusiness {
         {
             if (args[0].equals ("-console"))
             {
-           
-               // TODO 
-                // You should code the following functionality:
-
-                //    You need to determine if it is a parameter query. If it is, then
-                //    you will need to ask the user to put in the values for the Parameters in your query
-                //    you will then call ExecuteQuery or ExecuteUpdate (depending on whether it is an action query or regular query)
-                //    if it is a regular query, you should then get the data by calling GetQueryData. You should then display this
-                //    output. 
-                //    If it is an action query, you will tell how many row's were affected by it.
-                // 
-                //    This is Psuedo Code for the task:  
-                //    Connect()
-                //    n = GetTotalQueries()
-                //    for (i=0;i < n; i++)
-                //    {
-                //       Is it a query that Has Parameters
-                //       Then
-                //           amt = find out how many parameters it has
-                //           Create a paramter array of strings for that amount
-                //           for (j=0; j< amt; j++)
-                //              Get The Paramater Label for Query and print it to console. Ask the user to enter a value
-                //              Take the value you got and put it into your parameter array
-                //           If it is an Action Query then
-                //              call ExecuteUpdate to run the Query
-                //              call GetUpdateAmount to find out how many rows were affected, and print that value
-                //           else
-                //               call ExecuteQuery 
-                //               call GetQueryData to get the results back
-                //               print out all the results
-                //           end if
-                //      }
-                //    Disconnect()
-
-
-                // NOTE - IF THERE ARE ANY ERRORS, please print the Error output
-                // NOTE - The QueryRunner functions call the various JDBC Functions that are in QueryJDBC. If you would rather code JDBC
-                // functions directly, you can choose to do that. It will be harder, but that is your option.
-                // NOTE - You can look at the QueryRunner API calls that are in QueryFrame.java for assistance. You should not have to 
-                //    alter any code in QueryJDBC, QueryData, or QueryFrame to make this work.
                 
-                // Need to make a QueryRunner object to use its methods
-                //QueryRunner consoleQR = new QueryRunner();
-                
-                final String prompt = 
-                        "\nSelect an option:" +
-                        "\n 0. Test Function" +
-                        "\n 1. Menu Planning" +
-                        "\n 2. Management" +
-                        "\n 3. Vendor Information" +
-                        "\n 4. Help" +
-                        "\n X. Exit program." +
-                        "\n\n >> ";
-                
-                final String welcomeMessage = "Welcome to the Delicious " +
-                                              "Business Database!\n";
-                final String goodbyeMessage = "\nThank you for using " +
-                                     "the Delicious Business Database!\n";
-                
-                // Prints out welcome message
-                System.out.println(WELCOME_MSG);
+                // CONNECTION
                 boolean connected = false;
                 do {
-                    System.out.println("\nWhich database would you like to connect to?");
+                    System.out.println(
+                        "\nWhich database would you like to connect to?");
                     System.out.println("default:  " + DEFAULT_DB);
-                    System.out.println("other:  different database (must provide "
-                    		+ "login credentials)");
-                    System.out.println("\nPlease type 'default' or 'other' at prompt");
+                    System.out.println(
+                        "other:  different database (must provide " +
+                        "login credentials)");
+                    System.out.println(
+                        "\nPlease type 'default' or 'other' at prompt");
                     System.out.print("\n>> ");
                     connected = connectToDB(keyboard.nextLine());
                 } while (!connected);
                
                 
-                System.out.println(welcomeMessage);
+                // ENTER MAIN MENU LOOP
+                
+                System.out.println(WELCOME_MSG);
+                
                 
                 while (usingProgram) {
-                    System.out.print(prompt);
+                    System.out.print(MAIN_MENU);
                     String input = keyboard.nextLine();
                     inputProcessing(keyboard, QUERYRUNNER, input);
                 }
                 
-                System.out.println(goodbyeMessage);
                 
-                // Create some kind of help menu 
-                // Show commands:
-                // - Show queries (Number, name, params)
-                // - Run single query (based on number)
-                // - Run all queries (use loop to go through all)
-                // - Disconnect 
+                // SHUTDOWN
                 
-                // When executing queries with parameters, could also store
-                // "default" parameter values for easy testing/demos 
-                // E.g., each query has its own array of param values, then we
-                // just loop through the array to input all params for a given query
-                
-                // ExecuteQuery must take an array of parameters and will get
-                // the length of that array in QueryJDBC.ExecuteQuery
-                // If there are no params, create an array size 0 and pass in
-                
-                
-
-                
-                
-//                String[] noParams = new String[0];
-//                
-//                // 0 refers to the query number (index) in the queryArray
-//                QUERYRUNNER.ExecuteQuery(0, noParams);
-//                
-//                // Gathers table header and field data.
-//                String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
-//                String[][] queryResults = QUERYRUNNER.GetQueryData();
-//                
-//                // Prints table header and field data.
-//                printView(queryHeaders, queryResults);
-                
-                
-                
-                
-                // end line.
+                System.out.println(GOODBYE_MSG);
                 keyboard.close();               
                 // TODO figure out why disconnect throws an error.
                 // consoleQR.Disconnect();
@@ -196,6 +109,7 @@ public class DeliciousBusiness {
     		System.out.println("\nError with connection:\n" +
     					QUERYRUNNER.GetError() + "\n\nPlease try again.");
     }
+    
     
     private static void testFunction(QueryRunner consoleQR) {
         String[] noParams = new String[0];
@@ -266,15 +180,28 @@ public class DeliciousBusiness {
                 System.out.println("Input not recognized, try again.");
         }        
     }    
+
+    
+    
+    private static final String MAIN_MENU = 
+            "\n\nSelect an option:" +
+            "\n 0. Test Function" +
+            "\n 1. Menu Planning" +
+            "\n 2. Management" +
+            "\n 3. Vendor Information" +
+            "\n 4. Help" +
+            "\n X. Exit program." +
+            "\n\n >> ";
+    
+    private static final String WELCOME_MSG = "Welcome to the Delicious " +
+                                  "Business Database!\n";
+    private static final String GOODBYE_MSG = "\nThank you for using " +
+                         "the Delicious Business Database!\n";
     
     private static boolean usingProgram = true;
-    
+
     private static final QueryRunner QUERYRUNNER = new QueryRunner();
     private static Scanner keyboard = new Scanner(System.in);
-    
-    private static final String WELCOME_MSG = "Welcome to QueryRunner!";
-   
-
     private static final String DEFAULT_HOST = 
     		"deliciousbusiness.cespupxlvku2.us-east-1.rds.amazonaws.com";
     private static final String DEFAULT_USER = "admin";
@@ -282,3 +209,84 @@ public class DeliciousBusiness {
     private static final String DEFAULT_DB = "delicious_business";
 
 }
+
+
+
+
+
+
+// TODO 
+// You should code the following functionality:
+
+//    You need to determine if it is a parameter query. If it is, then
+//    you will need to ask the user to put in the values for the Parameters in your query
+//    you will then call ExecuteQuery or ExecuteUpdate (depending on whether it is an action query or regular query)
+//    if it is a regular query, you should then get the data by calling GetQueryData. You should then display this
+//    output. 
+//    If it is an action query, you will tell how many row's were affected by it.
+// 
+//    This is Psuedo Code for the task:  
+//    Connect()
+//    n = GetTotalQueries()
+//    for (i=0;i < n; i++)
+//    {
+//       Is it a query that Has Parameters
+//       Then
+//           amt = find out how many parameters it has
+//           Create a paramter array of strings for that amount
+//           for (j=0; j< amt; j++)
+//              Get The Paramater Label for Query and print it to console. Ask the user to enter a value
+//              Take the value you got and put it into your parameter array
+//           If it is an Action Query then
+//              call ExecuteUpdate to run the Query
+//              call GetUpdateAmount to find out how many rows were affected, and print that value
+//           else
+//               call ExecuteQuery 
+//               call GetQueryData to get the results back
+//               print out all the results
+//           end if
+//      }
+//    Disconnect()
+
+// NOTE - IF THERE ARE ANY ERRORS, please print the Error output
+// NOTE - The QueryRunner functions call the various JDBC Functions that are in QueryJDBC. If you would rather code JDBC
+// functions directly, you can choose to do that. It will be harder, but that is your option.
+// NOTE - You can look at the QueryRunner API calls that are in QueryFrame.java for assistance. You should not have to 
+//    alter any code in QueryJDBC, QueryData, or QueryFrame to make this work.
+
+// Need to make a QueryRunner object to use its methods
+//QueryRunner consoleQR = new QueryRunner();
+
+
+
+// Create some kind of help menu 
+// Show commands:
+// - Show queries (Number, name, params)
+// - Run single query (based on number)
+// - Run all queries (use loop to go through all)
+// - Disconnect 
+
+// When executing queries with parameters, could also store
+// "default" parameter values for easy testing/demos 
+// E.g., each query has its own array of param values, then we
+// just loop through the array to input all params for a given query
+
+// ExecuteQuery must take an array of parameters and will get
+// the length of that array in QueryJDBC.ExecuteQuery
+// If there are no params, create an array size 0 and pass in
+
+
+
+
+
+//String[] noParams = new String[0];
+//
+//// 0 refers to the query number (index) in the queryArray
+//QUERYRUNNER.ExecuteQuery(0, noParams);
+//
+//// Gathers table header and field data.
+//String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
+//String[][] queryResults = QUERYRUNNER.GetQueryData();
+//
+//// Prints table header and field data.
+//printView(queryHeaders, queryResults);
