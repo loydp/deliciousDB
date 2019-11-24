@@ -310,7 +310,6 @@ public class QueryRunner {
             	   System.out.println();
             	}
             	
-            	
             	keyboard.close();
             }
         }
