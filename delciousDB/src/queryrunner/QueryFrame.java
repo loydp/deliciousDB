@@ -27,6 +27,7 @@ public class QueryFrame extends javax.swing.JFrame {
  * @param queryrunnerObj 
  */
     public QueryFrame(QueryRunner queryrunnerObj) {
+	setTitle("Delicious Business");
 	setPreferredSize(new Dimension(1280, 1000));
 	setIconImage(Toolkit.getDefaultToolkit().getImage(QueryFrame.class.getResource("/queryrunner/farmer.ico")));
 	getContentPane().setBackground(new Color(240, 230, 140));
