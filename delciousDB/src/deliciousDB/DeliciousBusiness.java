@@ -68,19 +68,44 @@ public class DeliciousBusiness {
                 // Need to make a QueryRunner object to use its methods
                 //QueryRunner consoleQR = new QueryRunner();
                 
+                final String prompt = 
+                        "\nSelect an option:" +
+                        "\n 0. Test Function" +
+                        "\n 1. Menu Planning" +
+                        "\n 2. Management" +
+                        "\n 3. Vendor Information" +
+                        "\n 4. Help" +
+                        "\n X. Exit program." +
+                        "\n\n >> ";
+                
+                final String welcomeMessage = "Welcome to the Delicious " +
+                                              "Business Database!\n";
+                final String goodbyeMessage = "\nThank you for using " +
+                                     "the Delicious Business Database!\n";
+                
                 // Prints out welcome message
                 System.out.println(WELCOME_MSG);
                 boolean connected = false;
                 do {
-                System.out.println("\nWhich database would you like to connect to?");
-                System.out.println("default:  " + DEFAULT_DB);
-                System.out.println("other:  different database (must provide "
-                		+ "login credentials)");
-                System.out.println("\nPlease type 'default' or 'other' at prompt");
-                System.out.print("\n>> ");
-                connected = connectToDB(keyboard.nextLine());
+                    System.out.println("\nWhich database would you like to connect to?");
+                    System.out.println("default:  " + DEFAULT_DB);
+                    System.out.println("other:  different database (must provide "
+                    		+ "login credentials)");
+                    System.out.println("\nPlease type 'default' or 'other' at prompt");
+                    System.out.print("\n>> ");
+                    connected = connectToDB(keyboard.nextLine());
                 } while (!connected);
                
+                
+                System.out.println(welcomeMessage);
+                
+                while (usingProgram) {
+                    System.out.print(prompt);
+                    String input = keyboard.nextLine();
+                    inputProcessing(keyboard, QUERYRUNNER, input);
+                }
+                
+                System.out.println(goodbyeMessage);
                 
                 // Create some kind of help menu 
                 // Show commands:
@@ -172,35 +197,84 @@ public class DeliciousBusiness {
     					QUERYRUNNER.GetError() + "\n\nPlease try again.");
     }
     
+    private static void testFunction(QueryRunner consoleQR) {
+        String[] noParams = new String[0];
+        
+        // 0 refers to the query number (index) in the queryArray
+        consoleQR.ExecuteQuery(0, noParams);
+        
+        // Gathers table header and field data.
+        String[] queryHeaders = consoleQR.GetQueryHeaders();
+        String[][] queryResults = consoleQR.GetQueryData();
+        
+        // Prints table header and field data.
+        printView(queryHeaders, queryResults);
+    }
+    
+    
     /**
      * Displays the results of queries, first using attribute names and
      * then using table fields. Gives each field 20 chars.
      * This may be expanded later.
      * @param queryResults
      */
-    public static void printView( String[] queryHeaders, 
+    private static void printView( String[] queryHeaders, 
                                   String[][] queryResults) {
-   
-        for (String attribute : queryHeaders) {
-            System.out.printf("|  %-20s", attribute);
-            // Add in dashed horizontal line
-        }
+  
+        for (int i = 0; i < 80; i++)
+            System.out.print("—");                      // solid line
         
         System.out.println();
         
-        for (String[] row : queryResults) {
-            for (String field : row) {
-                System.out.printf("|  %-20s", field);
-            }
-            System.out.println();
-            // Maybe not have output with space between each row?
+        for (String attribute : queryHeaders)
+            System.out.printf("| %-20s", attribute);    // header
+        
+        System.out.println();
+        
+        for (int i = 0; i < 80; i++)
+            System.out.print("—");                      // solid line
+
+        for (String attribute : queryHeaders) {
+            System.out.printf("|  %-20s", attribute);
         }
     }
-
+    
+    
+    private static void inputProcessing(Scanner keyboard, 
+                                QueryRunner consoleQR, String input) {
+        switch (input) {
+            case "0" :
+                testFunction(consoleQR);
+                break;
+            case "1" :
+                // TODO
+                break;
+            case "2" :
+                // TODO
+                break;
+            case "3" :
+                // TODO
+                break;
+            case "4" :
+                // TODO
+                break;
+            case "x" :
+            case "X" :
+                usingProgram = false;
+                break;
+            default :
+                System.out.println("Input not recognized, try again.");
+        }        
+    }    
+    
+    private static boolean usingProgram = true;
+    
     private static final QueryRunner QUERYRUNNER = new QueryRunner();
     private static Scanner keyboard = new Scanner(System.in);
     
     private static final String WELCOME_MSG = "Welcome to QueryRunner!";
+   
+
     private static final String DEFAULT_HOST = 
     		"deliciousbusiness.cespupxlvku2.us-east-1.rds.amazonaws.com";
     private static final String DEFAULT_USER = "admin";
