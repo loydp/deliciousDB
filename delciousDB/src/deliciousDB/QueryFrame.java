@@ -31,10 +31,10 @@ public class QueryFrame extends javax.swing.JFrame {
     public QueryFrame(QueryRunner queryrunnerObj) {
 	dbPicture.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	dbPicture.setToolTipText("Delicious Business Family Photo");
-	dbPicture.setIcon(new ImageIcon(QueryFrame.class.getResource("/queryrunner/DeliciousBusinessSmall.png")));
+	dbPicture.setIcon(new ImageIcon(QueryFrame.class.getResource("/deliciousDB/DeliciousBusinessSmall.png")));
 	
 	
-	Image dbImage = new ImageIcon(this.getClass().getResource("/queryrunner/DeliciousBusinessSmall.png")).getImage();
+	Image dbImage = new ImageIcon(this.getClass().getResource("/deliciousDB/DeliciousBusinessSmall.png")).getImage();
     dbPicture.setIcon(new ImageIcon(dbImage));
     dbPicture.setBounds(1100, 40, 110, 140);
     getContentPane().add(dbPicture);
@@ -42,7 +42,7 @@ public class QueryFrame extends javax.swing.JFrame {
 	
 	setTitle("Delicious Business");
 	setPreferredSize(new Dimension(1250, 990));
-	setIconImage(Toolkit.getDefaultToolkit().getImage(QueryFrame.class.getResource("/queryrunner/farmer.ico")));
+	setIconImage(Toolkit.getDefaultToolkit().getImage(QueryFrame.class.getResource("/deliciousDB/farmer.ico")));
 	getContentPane().setBackground(new Color(240, 230, 140));
 	
         initComponents();
