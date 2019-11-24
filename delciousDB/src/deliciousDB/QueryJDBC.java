@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package queryrunner;
+package deliciousDB;
 import java.sql.Connection;
 import java.sql.*;
 import java.sql.DriverManager;
@@ -21,7 +21,8 @@ public class QueryJDBC {
 
 
     public Connection m_conn = null; 
-    static final String DB_DRV = "com.mysql.jdbc.Driver";
+    // XXX if something breaks, try removing cj from this string:
+    static final String DB_DRV = "com.mysql.cj.jdbc.Driver";
     String m_error="";  
     String m_url;
     String m_user;
