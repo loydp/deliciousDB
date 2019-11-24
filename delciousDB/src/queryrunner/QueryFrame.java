@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
 import javax.swing.*;
+import java.awt.Toolkit;
+import java.awt.Dimension;
 
 public class QueryFrame extends javax.swing.JFrame {
 
@@ -25,6 +27,9 @@ public class QueryFrame extends javax.swing.JFrame {
  * @param queryrunnerObj 
  */
     public QueryFrame(QueryRunner queryrunnerObj) {
+	setPreferredSize(new Dimension(1280, 1000));
+	setIconImage(Toolkit.getDefaultToolkit().getImage(QueryFrame.class.getResource("/queryrunner/farmer.ico")));
+	getContentPane().setBackground(new Color(240, 230, 140));
         initComponents();
         m_parmlabels = new JLabel[]{jLabel1, jLabel2, jLabel3, jLabel4, jLabel9, jLabel10, jLabel11, jLabel12};        
         m_textvals = new JTextField[] { jTextField5, jTextField6,jTextField7,jTextField8,jTextField9,jTextField10,jTextField11,jTextField12};
@@ -54,12 +59,15 @@ public class QueryFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextFieldDatabase = new javax.swing.JTextField();
+        jTextFieldDatabase.setText("delicious_business");
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
         jTextHostname = new javax.swing.JTextField();
+        jTextHostname.setText("deliciousbusiness.cespupxlvku2.us-east-1.rds.amazonaws.com");
         jTextFieldUser = new javax.swing.JTextField();
+        jTextFieldUser.setText("admin");
         jPanel1 = new javax.swing.JPanel();
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
@@ -169,7 +177,8 @@ public class QueryFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 980, 130));
 
         jPanel2.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 980, 240));
+        //getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 980, 240));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 1180, 540));
 
         jComboBoxQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -206,7 +215,7 @@ public class QueryFrame extends javax.swing.JFrame {
         });
         getContentPane().add(jBtnRunQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 190, -1, -1));
 
-        jPasswordField1.setText("jPasswordField1");
+        jPasswordField1.setText("cpsc5021password");
         jPasswordField1.setNextFocusableComponent(jTextFieldDatabase);
         getContentPane().add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 120, -1));
 
