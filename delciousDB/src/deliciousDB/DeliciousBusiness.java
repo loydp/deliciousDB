@@ -58,7 +58,7 @@ public class DeliciousBusiness {
                 System.out.println(GOODBYE_MSG);
                 keyboard.close();               
                 // TODO figure out why disconnect throws an error.
-                // consoleQR.Disconnect();
+                // QUERYRUNNER.Disconnect();
             }
         }
         
@@ -111,15 +111,14 @@ public class DeliciousBusiness {
     }
     
     
-    private static void testFunction(QueryRunner consoleQR) {
+    private static void testFunction(QueryRunner QUERYRUNNER) {
         String[] noParams = new String[0];
         
-        // 0 refers to the query number (index) in the queryArray
-        consoleQR.ExecuteQuery(0, noParams);
+        QUERYRUNNER.ExecuteQuery(0, noParams);
         
         // Gathers table header and field data.
-        String[] queryHeaders = consoleQR.GetQueryHeaders();
-        String[][] queryResults = consoleQR.GetQueryData();
+        String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
+        String[][] queryResults = QUERYRUNNER.GetQueryData();
         
         // Prints table header and field data.
         printView(queryHeaders, queryResults);
@@ -148,17 +147,25 @@ public class DeliciousBusiness {
         for (int i = 0; i < 80; i++)
             System.out.print("—");                      // solid line
 
-        for (String attribute : queryHeaders) {
-            System.out.printf("|  %-20s", attribute);
+        System.out.println();
+        
+        for (String[] row : queryResults) {
+            for (String field : row) {
+                System.out.printf("| %-20s", field);    // data
+            }
+            System.out.print("\n");
         }
+        
+        for (int i = 0; i < 80; i++)
+            System.out.print("—");                      // solid line
     }
     
     
     private static void inputProcessing(Scanner keyboard, 
-                                QueryRunner consoleQR, String input) {
+                                QueryRunner QUERYRUNNER, String input) {
         switch (input) {
             case "0" :
-                testFunction(consoleQR);
+                testFunction(QUERYRUNNER);
                 break;
             case "1" :
                 // TODO
@@ -255,7 +262,7 @@ public class DeliciousBusiness {
 //    alter any code in QueryJDBC, QueryData, or QueryFrame to make this work.
 
 // Need to make a QueryRunner object to use its methods
-//QueryRunner consoleQR = new QueryRunner();
+//QueryRunner QUERYRUNNER = new QueryRunner();
 
 
 
