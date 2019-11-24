@@ -52,7 +52,10 @@ public class QueryRunner {
         //    IsItActionQuery (e.g. Mark it true if it is, otherwise false)
         //    IsItParameterQuery (e.g.Mark it true if it is, otherwise false)
         
-        m_queryArray.add(new QueryData("Select * from contact", null, null, false, false));   // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
+        /*
+         * This is where we add our specific queries 
+         */
+        m_queryArray.add(new QueryData("Select * from ingredient", null, null, false, false));   // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
         m_queryArray.add(new QueryData("Select * from contact where contact_id=?", new String [] {"CONTACT_ID"}, new boolean [] {false},  false, true));        // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
         m_queryArray.add(new QueryData("Select * from contact where contact_name like ?", new String [] {"CONTACT_NAME"}, new boolean [] {true}, false, true));        // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
         m_queryArray.add(new QueryData("insert into contact (contact_id, contact_name, contact_salary) values (?,?,?)",new String [] {"CONTACT_ID", "CONTACT_NAME", "CONTACT_SALARY"}, new boolean [] {false, false, false}, true, true));// THIS NEEDS TO CHANGE FOR YOUR APPLICATION
@@ -71,7 +74,7 @@ public class QueryRunner {
         return e.GetParmAmount();
     }
               
-    public String  GetParamText(int queryChoice, int parmnum )
+    public String GetParamText(int queryChoice, int parmnum )
     {
        QueryData e=m_queryArray.get(queryChoice);        
        return e.GetParamText(parmnum); 
@@ -245,6 +248,70 @@ public class QueryRunner {
                 //    alter any code in QueryJDBC, QueryData, or QueryFrame to make this work.
 //                System.out.println("Please write the non-gui functionality");
                 
+            	// Need to make a QueryRunner object to use its methods
+            	QueryRunner consoleQR = new QueryRunner();
+            	// Print out welcome message
+            	String welcomeMessage = "Welcome to QueryRunner.";
+            	System.out.println(welcomeMessage);
+            	
+            	// Could include the option to use stored login or new login 
+            	// (Stored being our DB params kept in constant variables)
+            	// Connect - get parameters needed for Connect() function
+            	Scanner keyboard = new Scanner(System.in);
+            	// System.out.println("CONNECT TO DATABASE");
+            	// System.out.print("Enter hostname: ");
+            	String hostname = "deliciousbusiness.cespupxlvku2.us-east-1.rds.amazonaws.com";
+            	//System.out.print("Enter username: ");
+            	String username = "admin";
+            	System.out.print("Enter password: ");
+            	String password = "cpsc5021password";
+            	System.out.print("Enter name of database: ");
+            	String database = "delicious_business";
+            	boolean connected = consoleQR.Connect(hostname, username, password, database);
+            	
+            	// Indicate whether connection was successful 
+            	if (connected = true) {
+            		System.out.println("Connection to '" + database + "' succesful.");
+            	}
+            	else {
+            		System.out.println("Error with connection: " + consoleQR.GetError());
+            	}
+            	
+            	// Create some kind of help menu 
+            	// Show commands: 
+            	// - Show queries (Number, name, params)
+            	// - Run single query (based on number)
+            	// - Run all queries (use loop to go through all)
+            	// - Disconnect 
+            	
+            	// When executing queries with parameters, could also store
+            	// "default" parameter values for easy testing/demos 
+            	// E.g., each query has its own array of param values, then we
+            	// just loop through the array to input all params for a given query
+            	
+            	// consoleQR.Disconnect();
+            	
+            	// Close Scanner at end!
+            	
+            	
+            	// ExecuteQuery must take an array of parameters and will get
+            	// the length of that array in QueryJDBC.ExecuteQuery
+            	// If there are no params, create an array size 0 and pass in
+            	String[] noParams = new String[0];
+            	// 0 refers to the query number (index) in the queryArray
+            	consoleQR.ExecuteQuery(0, noParams);
+            	String[][] queryResults = consoleQR.m_jdbcData.GetData();
+            	for (String[] x : queryResults)
+            	{
+            	   for (String y : x)
+            	   {
+            	        System.out.print(y + " ");
+            	   }
+            	   System.out.println();
+            	}
+            	
+            	
+            	keyboard.close();
             }
         }
  
