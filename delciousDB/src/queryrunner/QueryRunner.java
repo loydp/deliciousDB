@@ -298,8 +298,7 @@ public class QueryRunner {
                 // If there are no params, create an array size 0 and pass in
                 
                 
-                
-                
+
                 
                 
                 String[] noParams = new String[0];
