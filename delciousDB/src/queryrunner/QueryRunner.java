@@ -40,7 +40,7 @@ public class QueryRunner {
         
         // You will need to put your Project Application in the below variable
         
-        this.m_projectTeamApplication="delicious_business";    // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
+        this.m_projectTeamApplication="Delicious Business Database";    // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
         
         // Each row that is added to m_queryArray is a separate query. It does not work on Stored procedure calls.
         // The 'new' Java keyword is a way of initializing the data that will be added to QueryArray. Please do not change
