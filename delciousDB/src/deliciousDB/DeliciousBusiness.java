@@ -10,15 +10,13 @@ public class DeliciousBusiness {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-
-        final QueryRunner queryrunner = new QueryRunner();
         
         if (args.length == 0)
         {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
 
-                    new QueryFrame(queryrunner).setVisible(true);
+                    new QueryFrame(QUERYRUNNER).setVisible(true);
                 }            
             });
         }
@@ -26,7 +24,7 @@ public class DeliciousBusiness {
         {
             if (args[0].equals ("-console"))
             {
-                System.out.println("Nothing has been implemented yet. Please implement the necessary code");
+           
                // TODO 
                 // You should code the following functionality:
 
@@ -68,39 +66,21 @@ public class DeliciousBusiness {
                 //    alter any code in QueryJDBC, QueryData, or QueryFrame to make this work.
                 
                 // Need to make a QueryRunner object to use its methods
-                QueryRunner consoleQR = new QueryRunner();
+                //QueryRunner consoleQR = new QueryRunner();
                 
                 // Prints out welcome message
-                String welcomeMessage = "Welcome to QueryRunner.";
-                System.out.println(welcomeMessage);
-                
-                
-                // Could include the option to use stored login or new login 
-                // (Stored being our DB params kept in constant variables)
-                // Connect - get parameters needed for Connect() function
-                Scanner keyboard = new Scanner(System.in);
-                
-                System.out.println("CONNECTING TO DATABASE ...");
-                // System.out.print("Enter hostname: ");
-                final String hostname = "deliciousbusiness.cespupxlvku2.us-east-1.rds.amazonaws.com";
-                // System.out.print("Enter username: ");
-                final String username = "admin";
-                // System.out.print("Enter password: ");
-                final String password = "cpsc5021password";
-                // System.out.print("Enter name of database: ");
-                final String database = "delicious_business";
-                
-                boolean connected = consoleQR.Connect(hostname, username, password, database);
-                
-                
-                // Indicate whether connection was successful 
-                if (connected == true) {
-                    System.out.println("Connection to '" + database + "' successful.");
-                }
-                else {
-                    System.out.println("Error with connection: " + consoleQR.GetError());
-                }
-                
+                System.out.println(WELCOME_MSG);
+                boolean connected = false;
+                do {
+                System.out.println("\nWhich database would you like to connect to?");
+                System.out.println("default:  " + DEFAULT_DB);
+                System.out.println("other:  different database (must provide "
+                		+ "login credentials)");
+                System.out.println("\nPlease type 'default' or 'other' at prompt");
+                System.out.print("\n>> ");
+                connected = connectToDB(keyboard.nextLine());
+                } while (!connected);
+               
                 
                 // Create some kind of help menu 
                 // Show commands:
@@ -122,17 +102,17 @@ public class DeliciousBusiness {
 
                 
                 
-                String[] noParams = new String[0];
-                
-                // 0 refers to the query number (index) in the queryArray
-                consoleQR.ExecuteQuery(0, noParams);
-                
-                // Gathers table header and field data.
-                String[] queryHeaders = consoleQR.GetQueryHeaders();
-                String[][] queryResults = consoleQR.GetQueryData();
-                
-                // Prints table header and field data.
-                printView(queryHeaders, queryResults);
+//                String[] noParams = new String[0];
+//                
+//                // 0 refers to the query number (index) in the queryArray
+//                QUERYRUNNER.ExecuteQuery(0, noParams);
+//                
+//                // Gathers table header and field data.
+//                String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
+//                String[][] queryResults = QUERYRUNNER.GetQueryData();
+//                
+//                // Prints table header and field data.
+//                printView(queryHeaders, queryResults);
                 
                 
                 
@@ -146,9 +126,52 @@ public class DeliciousBusiness {
         
     }   
     
+  
+    /**
+     * Manages all aspects of connecting to a database
+     * @param type of connection user wants (default DB with stored credentials
+     * or new DB)
+     * @return true if connected, false if not connected
+     */
+    private static boolean connectToDB(String type) {
+    	boolean connected = false;
+    	String host, user, pw, dbName;
+    	String typeLC = type.toLowerCase();
+    	switch (typeLC) {
+    		case "default":
+    			connected = QUERYRUNNER.Connect(DEFAULT_HOST, DEFAULT_USER, 
+    					DEFAULT_PASSWORD, DEFAULT_DB);
+    			printConnectionStatus(connected, DEFAULT_DB);
+    			return connected;
+    		case "other":
+    			System.out.print("Enter hostname: ");
+    			host = keyboard.nextLine();
+    			System.out.print("Enter username: ");
+    			user = keyboard.nextLine();
+    			System.out.print("Enter password: ");
+    			pw = keyboard.nextLine();
+    			System.out.print("Enter name of database: ");
+    			dbName = keyboard.nextLine();
+    			connected = QUERYRUNNER.Connect(host, user, pw, dbName);
+    			printConnectionStatus(connected, dbName);
+    			return connected;
+    		default:
+    			System.out.println("Command not recognized. Please try again.");
+    			return connected;
+    	}
+    }
     
+    /**
+     * Displays whether or not connection was successful.
+     */
+    private static void printConnectionStatus(boolean status, String db) {
+    	if (status == true)
+    		System.out.println("Connection to " + db + " successful!");
+    	else
+    		System.out.println("\nError with connection:\n" +
+    					QUERYRUNNER.GetError() + "\n\nPlease try again.");
+    }
     
-
     /**
      * Displays the results of queries, first using attribute names and
      * then using table fields. Gives each field 20 chars.
@@ -159,7 +182,8 @@ public class DeliciousBusiness {
                                   String[][] queryResults) {
    
         for (String attribute : queryHeaders) {
-            System.out.printf("|  %-20s ", attribute);
+            System.out.printf("|  %-20s", attribute);
+            // Add in dashed horizontal line
         }
         
         System.out.println();
@@ -169,7 +193,18 @@ public class DeliciousBusiness {
                 System.out.printf("|  %-20s", field);
             }
             System.out.println();
+            // Maybe not have output with space between each row?
         }
     }
+
+    private static final QueryRunner QUERYRUNNER = new QueryRunner();
+    private static Scanner keyboard = new Scanner(System.in);
+    
+    private static final String WELCOME_MSG = "Welcome to QueryRunner!";
+    private static final String DEFAULT_HOST = 
+    		"deliciousbusiness.cespupxlvku2.us-east-1.rds.amazonaws.com";
+    private static final String DEFAULT_USER = "admin";
+    private static final String DEFAULT_PASSWORD = "cpsc5021password";
+    private static final String DEFAULT_DB = "delicious_business";
 
 }

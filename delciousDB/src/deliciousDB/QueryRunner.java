@@ -33,11 +33,7 @@ public class QueryRunner {
         
         // TODO - You will need to change the queries below to match your queries.
         
-        //Doug Test
-        //Doug Test 2
-        
-        // Commit conflict test.
-        
+     
         // You will need to put your Project Application in the below variable
         
         this.m_projectTeamApplication="delicious_business";    // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
@@ -52,13 +48,61 @@ public class QueryRunner {
         //    IsItActionQuery (e.g. Mark it true if it is, otherwise false)
         //    IsItParameterQuery (e.g.Mark it true if it is, otherwise false)
         
-        /*
-         * This is where we add our specific queries 
-         */
-        m_queryArray.add(new QueryData("Select * from ingredient", null, null, false, false));   // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
-        m_queryArray.add(new QueryData("Select * from contact where contact_id=?", new String [] {"CONTACT_ID"}, new boolean [] {false},  false, true));        // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
-        m_queryArray.add(new QueryData("Select * from contact where contact_name like ?", new String [] {"CONTACT_NAME"}, new boolean [] {true}, false, true));        // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
-        m_queryArray.add(new QueryData("insert into contact (contact_id, contact_name, contact_salary) values (?,?,?)",new String [] {"CONTACT_ID", "CONTACT_NAME", "CONTACT_SALARY"}, new boolean [] {false, false, false}, true, true));// THIS NEEDS TO CHANGE FOR YOUR APPLICATION
+        /* Argument format: 
+         * String query (the entire query)
+         * String[] parms  (null if no params OR list of parameter names)
+         * boolean [] likeparms (if parameter has "LIKE" clause; null if no params OR true/false for each param in array
+         * boolean isAction (Action query = insert, update, delete)
+         * boolean isParm (True if query takes params, false if not)
+        */
+        m_queryArray.add(new QueryData(
+        		"Show all ingredients", 
+        		"Select * from ingredient", 
+        		null, 
+        		null, 
+        		false, 
+        		false));
+        m_queryArray.add(new QueryData(
+        		"Show ingredient inventory for dish at location", 
+        		"SELECT location_name, menu_item_name, ingredient_name, \r\n" + 
+        		"	RHI.ingredient_quant AS 'Quantity Needed', \r\n" + 
+        		"	RHI.ingredient_quant_unit AS 'Needed Units', \r\n" + 
+        		"	sum(INV.ingredient_quant) AS 'Quantity Available', \r\n" + 
+        		"	INV.ingredient_quant_unit AS 'Available Units'\r\n" + 
+        		"FROM menu_item as MI\r\n" + 
+        		"	JOIN menu_item_has_recipe as MIHR\r\n" + 
+        		"	ON MI.menu_item_ID = MIHR.menu_item_ID\r\n" + 
+        		"	JOIN recipe as R\r\n" + 
+        		"	ON MIHR.recipe_ID = R.recipe_ID\r\n" + 
+        		"	JOIN recipe_has_ingr as RHI\r\n" + 
+        		"	ON R.recipe_ID = RHI.recipe_ID\r\n" + 
+        		"	JOIN ingredient as I\r\n" + 
+        		"	ON RHI.ingredient_ID = I.ingredient_ID\r\n" + 
+        		"	JOIN vendor_product as VP\r\n" + 
+        		"    	ON I.ingredient_ID = VP.ingredient_ID\r\n" + 
+        		"    	JOIN inventory as INV\r\n" + 
+        		"    	ON VP.product_ID = INV.product_ID\r\n" + 
+        		"    	JOIN restaurant_location as L\r\n" + 
+        		"    	ON INV.location_ID = L.location_ID\r\n" + 
+        		"WHERE menu_item_name = ? AND location_name = ?\r\n" + 
+        		"GROUP BY ingredient_name;", 
+        		new String [] {"menu_item_name", "location_name"}, 
+        		new boolean [] {false, false},  
+        		false, 
+        		true));        
+        m_queryArray.add(new QueryData(
+        		"Name", 
+        		"Select * from contact where contact_name like ?", 
+        		new String [] {"CONTACT_NAME"}, 
+        		new boolean [] {true}, 
+        		false, 
+        		true));        
+        m_queryArray.add(new QueryData(
+        		"Name", 
+        		"insert into contact (contact_id, contact_name, contact_salary) values (?,?,?)",
+        		new String [] {"CONTACT_ID", "CONTACT_NAME", "CONTACT_SALARY"}, 
+        		new boolean [] {false, false, false}, 
+        		true, true));
                        
     }
        
