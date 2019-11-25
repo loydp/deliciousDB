@@ -200,8 +200,12 @@ public class QueryJDBC {
         url = "jdbc:mysql://";
         url += host;
         url +=":3306/";
-        url += database;   
-        url +="?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        url += database;
+        // NOTE: PL changed this to correct a useSSL warning.
+        // Next line was added, Question mark removed from line after that to
+        // allow concatenation.
+        url +="?autoReconnect=true&useSSL=false&";
+        url +="useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         try 
         {
 
