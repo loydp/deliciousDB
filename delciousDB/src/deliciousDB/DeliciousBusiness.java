@@ -134,25 +134,28 @@ public class DeliciousBusiness {
     
     /**
      * Displays the results of queries, first using attribute names and
-     * then using table fields. Gives each field 20 chars.
+     * then using table fields. Gives each field 22 chars.
      * This may be expanded later.
      * @param queryResults
      */
     private static void printView( String[] queryHeaders, 
                                   String[][] queryResults) {
-  
-        for (int i = 0; i < 80; i++)
-            System.out.print("-");                      // solid line
+        int attributeCount = 0;
+        
+        for (int i = 0; i < attributeCount * 22; i++)
+            System.out.print("-");                      // dashed line
         
         System.out.println();
         
-        for (String attribute : queryHeaders)
+        for (String attribute : queryHeaders) {
             System.out.printf("| %-20s", attribute);    // header
-        
+            attributeCount++;
+        }
+            
         System.out.println();
         
-        for (int i = 0; i < 80; i++)
-            System.out.print("-");                      // solid line
+        for (int i = 0; i < attributeCount * 22; i++)
+            System.out.print("-");                      // dashed line
 
         System.out.println();
         
@@ -163,8 +166,8 @@ public class DeliciousBusiness {
             System.out.print("\n");
         }
         
-        for (int i = 0; i < 80; i++)
-            System.out.print("-");                      // solid line
+        for (int i = 0; i < attributeCount * 22; i++)
+            System.out.print("-");                      // dashed line
         
         System.out.println();
     }
@@ -188,6 +191,10 @@ public class DeliciousBusiness {
 	                break;
 	            case "x" :
 	            case "X" :
+	            case "quit":
+	            case "Quit":
+	            case "Exit":
+	            case "exit":
 	                usingProgram = false;
 	                break;
 	            default :
@@ -228,6 +235,7 @@ public class DeliciousBusiness {
     	System.out.println("X. Back to main menu");
     }
     
+    
     private static final QueryRunner QUERYRUNNER = new QueryRunner();
     private static String[] queryNames = QUERYRUNNER.GetQueryNames();
     private static final String MAIN_MENU = 
@@ -237,16 +245,7 @@ public class DeliciousBusiness {
     		"\n2. Run all queries (" + QUERYRUNNER.GetTotalQueries() + 
     			" total)" +
     		"\nX. Exit program and disconnect";
-           
-    		// Original options
-    		/* "\n\nSelect an option (type option number + enter): " +
-            "\n 0. Test Function" +
-            "\n 1. Menu Planning" +
-            "\n 2. Management" +
-            "\n 3. Vendor Information" +
-            "\n 4. Help" +
-            "\n X. Exit program." +
-            "\n\n >> ";*/
+
     
     private static final String WELCOME_MSG = "\nWelcome to the Delicious " +
                                   "Business Database!";
