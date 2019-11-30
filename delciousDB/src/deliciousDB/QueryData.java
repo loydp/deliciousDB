@@ -38,6 +38,10 @@ public class QueryData {
 //        m_isParms = isParm;
 //    }
     
+    String GetQueryName() {
+    	return queryName;
+    }
+    
     String GetQueryString()
     {
         return m_queryString;

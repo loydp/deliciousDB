@@ -56,7 +56,7 @@ public class QueryRunner {
          * boolean isParm (True if query takes params, false if not)
         */
         m_queryArray.add(new QueryData(
-        		"Show all ingredients", 
+        		"Show all ingredients in database", 
         		"Select * from ingredient", 
         		null, 
         		null, 
@@ -128,6 +128,14 @@ public class QueryRunner {
     {
         QueryData e=m_queryArray.get(queryChoice);
         return e.GetQueryString();        
+    }
+    
+    public String[] GetQueryNames() {
+    	String[] queryNames = new String[m_queryArray.size()];
+    	for (int i = 0; i < m_queryArray.size(); i++) {
+    		queryNames[i] = (m_queryArray.get(i)).GetQueryName();
+    	}
+    	return queryNames;
     }
     
     /**

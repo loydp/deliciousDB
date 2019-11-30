@@ -44,21 +44,28 @@ public class DeliciousBusiness {
                 // ENTER MAIN MENU LOOP
                 
                 System.out.println(WELCOME_MSG);
-                
+                inMainMenu = true;
                 
                 while (usingProgram) {
-                    System.out.print(MAIN_MENU);
+                    if (inMainMenu)
+                    	System.out.print(MAIN_MENU);
+                    else {
+                    	printQueryOptions();
+                    }
+                    System.out.print("\n\n>> ");
                     String input = keyboard.nextLine();
-                    inputProcessing(keyboard, QUERYRUNNER, input);
+                    processInput(input);
                 }
                 
                 
-                // SHUTDOWN
-                
+                // SHUTDOWN         
+                boolean disconnected = QUERYRUNNER.Disconnect();
+                if (disconnected == false) 
+                	System.out.println(QUERYRUNNER.GetError());
+                else
+                	System.out.println("\nDisconnection successful");
                 System.out.println(GOODBYE_MSG);
-                keyboard.close();               
-                // TODO figure out why disconnect throws an error.
-                // QUERYRUNNER.Disconnect();
+                keyboard.close();  
             }
         }
         
@@ -69,7 +76,6 @@ public class DeliciousBusiness {
      * Manages all aspects of connecting to a database
      * @param type of connection user wants (default DB with stored credentials
      * or new DB)
-     * @return true if connected, false if not connected
      */
     private static boolean connectToDB(String type) {
     	boolean connected = false;
@@ -104,17 +110,18 @@ public class DeliciousBusiness {
      */
     private static void printConnectionStatus(boolean status, String db) {
     	if (status == true)
-    		System.out.println("Connection to " + db + " successful!");
+    		System.out.println("\nConnection to " + db + " successful!");
     	else
     		System.out.println("\nError with connection:\n" +
     					QUERYRUNNER.GetError() + "\n\nPlease try again.");
     }
     
     
-    private static void testFunction(QueryRunner QUERYRUNNER) {
-        String[] noParams = new String[0];
-        
-        QUERYRUNNER.ExecuteQuery(0, noParams);
+    private static void testFunction(int i) {
+        // Needs to be modified to accept param values
+    	int numParams = QUERYRUNNER.GetParameterAmtForQuery(i);
+    	String[] params = new String[numParams];
+        QUERYRUNNER.ExecuteQuery(i, params);
         
         // Gathers table header and field data.
         String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
@@ -135,7 +142,7 @@ public class DeliciousBusiness {
                                   String[][] queryResults) {
   
         for (int i = 0; i < 80; i++)
-            System.out.print("—");                      // solid line
+            System.out.print("-");                      // solid line
         
         System.out.println();
         
@@ -145,7 +152,7 @@ public class DeliciousBusiness {
         System.out.println();
         
         for (int i = 0; i < 80; i++)
-            System.out.print("—");                      // solid line
+            System.out.print("-");                      // solid line
 
         System.out.println();
         
@@ -157,57 +164,98 @@ public class DeliciousBusiness {
         }
         
         for (int i = 0; i < 80; i++)
-            System.out.print("—");                      // solid line
+            System.out.print("-");                      // solid line
+        
+        System.out.println();
     }
     
     
-    private static void inputProcessing(Scanner keyboard, 
-                                QueryRunner QUERYRUNNER, String input) {
-        switch (input) {
-            case "0" :
-                testFunction(QUERYRUNNER);
-                break;
-            case "1" :
-                // TODO
-                break;
-            case "2" :
-                // TODO
-                break;
-            case "3" :
-                // TODO
-                break;
-            case "4" :
-                // TODO
-                break;
-            case "x" :
-            case "X" :
-                usingProgram = false;
-                break;
-            default :
-                System.out.println("Input not recognized, try again.");
-        }        
+    private static void processInput(String input) {
+    	// Include if to test if in main menu or query option submenu
+    	// Need a static variable to track location
+    	if (inMainMenu) {
+	    	switch (input) {
+	        	// Help menu
+	        	case "0" :
+	                System.out.println("Help menu here");
+	        		//testFunction();
+	                break;
+	            case "1" :
+	            	inMainMenu = false;
+	                break;
+	            case "2" :
+	                // TODO
+	                break;
+	            case "x" :
+	            case "X" :
+	                usingProgram = false;
+	                break;
+	            default :
+	                System.out.println("Input not recognized, try again.");
+	    	}        
+    	}
+    	else {
+    		// See if input is an int
+    		try {
+    			int i = Integer.parseInt(input);
+    			if (i >= 0 && i < queryNames.length) {
+    				testFunction(i);
+    			}
+    			else {
+    				System.out.println("Invalid query number, try again.");
+    			}
+    		}
+    		catch (NumberFormatException nfe) {
+    			if (input.equalsIgnoreCase("x")) {
+        			inMainMenu = true;
+        		}
+    			else {
+    				System.out.println("Input not recognized, try again.");
+    			}
+    		}
+    	}
+    
     }    
 
+    private static void printQueryOptions() {
+    	System.out.println("\nAvailable queries (enter number to run): ");
+    	for (int i = 0; i < queryNames.length; i++) {
+    		System.out.print(i);
+    		System.out.print(". ");
+    		System.out.print(queryNames[i]);
+    		System.out.println();
+    	}
+    	System.out.println("X. Back to main menu");
+    }
     
-    
+    private static final QueryRunner QUERYRUNNER = new QueryRunner();
+    private static String[] queryNames = QUERYRUNNER.GetQueryNames();
     private static final String MAIN_MENU = 
-            "\n\nSelect an option:" +
+    		"\nMain Menu (enter option number to execute): " +
+    		"\n0. Help menu" +
+    		"\n1. Run single query (view options)" +
+    		"\n2. Run all queries (" + QUERYRUNNER.GetTotalQueries() + 
+    			" total)" +
+    		"\nX. Exit program and disconnect";
+           
+    		// Original options
+    		/* "\n\nSelect an option (type option number + enter): " +
             "\n 0. Test Function" +
             "\n 1. Menu Planning" +
             "\n 2. Management" +
             "\n 3. Vendor Information" +
             "\n 4. Help" +
             "\n X. Exit program." +
-            "\n\n >> ";
+            "\n\n >> ";*/
     
-    private static final String WELCOME_MSG = "Welcome to the Delicious " +
-                                  "Business Database!\n";
+    private static final String WELCOME_MSG = "\nWelcome to the Delicious " +
+                                  "Business Database!";
     private static final String GOODBYE_MSG = "\nThank you for using " +
                          "the Delicious Business Database!\n";
     
     private static boolean usingProgram = true;
+    private static boolean inMainMenu;
 
-    private static final QueryRunner QUERYRUNNER = new QueryRunner();
     private static Scanner keyboard = new Scanner(System.in);
     private static final String DEFAULT_HOST = 
     		"deliciousbusiness.cespupxlvku2.us-east-1.rds.amazonaws.com";
