@@ -86,7 +86,7 @@ public class QueryRunner {
         		"    	ON INV.location_ID = L.location_ID\r\n" + 
         		"WHERE menu_item_name = ? AND location_name = ?\r\n" + 
         		"GROUP BY ingredient_name;", 
-        		new String [] {"menu_item_name", "location_name"}, 
+        		new String [] {"menu item name", "location name"}, 
         		new boolean [] {false, false},  
         		false, 
         		true));        

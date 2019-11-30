@@ -24,7 +24,6 @@ public class DeliciousBusiness {
         {
             if (args[0].equals ("-console"))
             {
-                
                 // CONNECTION
                 boolean connected = false;
                 do {
@@ -39,10 +38,8 @@ public class DeliciousBusiness {
                     System.out.print("\n>> ");
                     connected = connectToDB(keyboard.nextLine());
                 } while (!connected);
-               
                 
                 // ENTER MAIN MENU LOOP
-                
                 System.out.println(WELCOME_MSG);
                 inMainMenu = true;
                 
@@ -56,7 +53,6 @@ public class DeliciousBusiness {
                     String input = keyboard.nextLine();
                     processInput(input);
                 }
-                
                 
                 // SHUTDOWN         
                 boolean disconnected = QUERYRUNNER.Disconnect();
@@ -117,11 +113,25 @@ public class DeliciousBusiness {
     }
     
     
-    private static void testFunction(int i) {
-        // Needs to be modified to accept param values
+    private static void runQuery(int i) {
+        // Get parameters for query
     	int numParams = QUERYRUNNER.GetParameterAmtForQuery(i);
     	String[] params = new String[numParams];
-        QUERYRUNNER.ExecuteQuery(i, params);
+    	
+    	// If there are params, get user input for them
+    	if (numParams > 0) 
+    		System.out.println("Please input query parameters");
+    	
+    	for (int j = 0; j < numParams; j++) 
+    		params[j] = getParamFromUser(i, j);
+    
+    	// Determine proper action for query type
+    	if (QUERYRUNNER.isActionQuery(i)) {
+    		QUERYRUNNER.ExecuteUpdate(i, params);
+    	}
+    	else {
+    		QUERYRUNNER.ExecuteQuery(i, params);
+    	}
         
         // Gathers table header and field data.
         String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
@@ -174,8 +184,6 @@ public class DeliciousBusiness {
     
     
     private static void processInput(String input) {
-    	// Include if to test if in main menu or query option submenu
-    	// Need a static variable to track location
     	if (inMainMenu) {
 	    	switch (input) {
 	        	// Help menu
@@ -206,7 +214,7 @@ public class DeliciousBusiness {
     		try {
     			int i = Integer.parseInt(input);
     			if (i >= 0 && i < queryNames.length) {
-    				testFunction(i);
+    				runQuery(i);
     			}
     			else {
     				System.out.println("Invalid query number, try again.");
@@ -235,6 +243,11 @@ public class DeliciousBusiness {
     	System.out.println("X. Back to main menu");
     }
     
+    private static String getParamFromUser(int queryNum, int paramNum) {
+    	String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
+    	System.out.print(paramName + ": ");
+    	return keyboard.nextLine();
+    }
     
     private static final QueryRunner QUERYRUNNER = new QueryRunner();
     private static String[] queryNames = QUERYRUNNER.GetQueryNames();
@@ -247,8 +260,8 @@ public class DeliciousBusiness {
     		"\nX. Exit program and disconnect";
 
     
-    private static final String WELCOME_MSG = "\nWelcome to the Delicious " +
-                                  "Business Database!";
+    private static final String WELCOME_MSG = "\n*** Welcome to the Delicious " +
+                                  "Business Database! ***";
     private static final String GOODBYE_MSG = "\nThank you for using " +
                          "the Delicious Business Database!\n";
     
