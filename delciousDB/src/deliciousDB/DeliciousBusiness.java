@@ -51,7 +51,7 @@ public class DeliciousBusiness {
                     }
                     System.out.print("\n\n>> ");
                     String input = keyboard.nextLine();
-                    processInput(input);
+                    processInput(keyboard, input);
                 }
                 
                 // SHUTDOWN         
@@ -200,14 +200,13 @@ public class DeliciousBusiness {
     	}
     }
     
-    private static void processInput(String input) {
+    private static void processInput(Scanner keyboard, String input) {
     	if (inMainMenu) {
 	    	switch (input) {
 	        	// Help menu
-	        	case "0" :
-	                System.out.println("Help menu here");
-	        		//testFunction();
-	                break;
+                case "0" :
+                    helpMenu(keyboard);
+                    break;
 	            case "1" :
 	            	inMainMenu = false;
 	                break;
@@ -249,6 +248,11 @@ public class DeliciousBusiness {
     
     }    
 
+    private static void helpMenu(Scanner keyboard) {
+        System.out.println(HELP_MSG);
+        keyboard.nextLine();
+    }
+    
     private static void printQueryOptions() {
     	System.out.println("\nAvailable queries (enter number to run): ");
     	for (int i = 0; i < queryNames.length; i++) {
@@ -276,6 +280,26 @@ public class DeliciousBusiness {
     			" total)" +
     		"\nX. Exit program and disconnect";
 
+    private static final String HELP_MSG =
+            "\n\n=== HELP MENU ===\n\n" +
+            "Delicious_DB is an application for eco and health conscious\n" +
+            "restaurant managers, who need access to the data stored in the\n" +
+            "Delicious Business Database. GUI and Console versions exist, and\n" +
+            "you're using the console\n" +
+            "version now.\n\n" +
+            
+            "Navigation is achieved via entering a character corresponding\n" + 
+            "to the appropriate option, and pressing enter.\n\n" +
+            
+            "Exiting the program can be done by entering \"X\" in any\n" +
+            "menu, and pressing enter.\n\n" +
+            
+            "Queries may need specific input in order to run.\n" +
+            
+            "When \"Run all queries\" is selected, specific values are\n" +
+            "chosen for you." +
+            "\n\n=== PRESS ENTER TO CONTINUE===\n" +
+            "\n";
     
     private static final String WELCOME_MSG = "\n*** Welcome to the Delicious " +
                                   "Business Database! ***";
