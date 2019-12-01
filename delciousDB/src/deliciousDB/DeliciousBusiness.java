@@ -140,6 +140,18 @@ public class DeliciousBusiness {
     		else
                 params[j] = autoFillParam(i, j);
     	}
+    	/*
+    	Available queries (enter number to run): 
+    	    0. Show all ingredients in database
+    	    1. Show ingredient inventory for specified dish at specified location
+    	    2. Show all dietary restrictions for the menu items in menu plan 1
+    	    3. Show all seasonal vendor products within specified time range
+    	    4. Show the minimum total amount of miles products need to travel to make a menu item
+    	    5. Show top selling dishes in the last month for all locations
+    	    6. Show all dietary restrictions in database
+    	    7. Add a dietary restriction to database
+    	    X. Back to main menu
+    	*/
     	
     	// Determine proper action for query type
     	if (QUERYRUNNER.isActionQuery(i)) {
@@ -156,8 +168,11 @@ public class DeliciousBusiness {
             // Prints table header and field data.
             printView(actionStatus, queryHeaders, queryResults);
     	}
-        System.out.println("===(press ENTER to continue)===");
-        keyboard.nextLine();
+    	
+    	if (i < QUERYRUNNER.GetTotalQueries() - 2) {
+            System.out.println(">> (press ENTER to continue)");
+            keyboard.nextLine();
+    	}
     	
     }
     
@@ -202,8 +217,6 @@ public class DeliciousBusiness {
         System.out.print(paramName + ": ");
         String ret = QUERYRUNNER.GetParamDefault(queryNum, paramNum);
         System.out.println(ret + "\n");
-        System.out.println("===(press ENTER to continue)===");
-        keyboard.nextLine();
         return ret;
     }
     
@@ -377,9 +390,6 @@ public class DeliciousBusiness {
 
 
 
-
-
-
 // TODO 
 // You should code the following functionality:
 
@@ -439,9 +449,6 @@ public class DeliciousBusiness {
 // ExecuteQuery must take an array of parameters and will get
 // the length of that array in QueryJDBC.ExecuteQuery
 // If there are no params, create an array size 0 and pass in
-
-
-
 
 
 //String[] noParams = new String[0];
