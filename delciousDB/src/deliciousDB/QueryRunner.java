@@ -68,8 +68,8 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show ingredient inventory for specified dish at specified location", 
-        		"SELECT location_name, menu_item_name, ingredient_name, \r\n" + 
-        		"	RHI.ingredient_quant AS 'Quantity Needed', \r\n" + 
+        		"SELECT location_name as 'Location Name', menu_item_name as 'Menu Item', ingredient_name as 'Ingredient', " + 
+        		"	RHI.ingredient_quant AS 'Quantity Needed', " + 
         		"	RHI.ingredient_quant_unit AS 'Needed Units', \r\n" + 
         		"	sum(INV.ingredient_quant) AS 'Quantity Available', \r\n" + 
         		"	INV.ingredient_quant_unit AS 'Available Units'\r\n" + 
@@ -98,7 +98,7 @@ public class QueryRunner {
        
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions for the menu items in menu plan 1", 
-        		"SELECT DISTINCT menu_item_name, dietary_restr_name\r\n" + 
+        		"SELECT DISTINCT menu_item_name as 'Menu Item', dietary_restr_name as 'Dietary Restriction' " + 
         		"FROM menu_plan_composition AS MPC\r\n" + 
         		"	JOIN menu_item as MI\r\n" + 
         		"	ON MPC.menu_item_ID = MI.menu_item_ID\r\n" + 
@@ -124,8 +124,8 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show all seasonal vendor products within specified time range", 
-        		"SELECT	ingredient.ingredient_name, vendor_product.product_id,\r\n" + 
-        		"	vendor_product.product_season_start, vendor_product.product_season_end\r\n" + 
+        		"SELECT	ingredient.ingredient_name as 'Ingredient', vendor_product.product_id as 'Product ID', " + 
+        		"	vendor_product.product_season_start as 'Season Start', vendor_product.product_season_end as 'Season End' " + 
         		"FROM		vendor_product natural join ingredient\r\n" + 
         		"WHERE	vendor_product.product_limited_avail = 1\r\n" + 
         		"AND		vendor_product.product_season_start > ?\r\n" + 
