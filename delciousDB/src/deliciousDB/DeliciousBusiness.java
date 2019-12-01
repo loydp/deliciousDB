@@ -51,7 +51,7 @@ public class DeliciousBusiness {
                     }
                     System.out.print("\n\n>> ");
                     String input = keyboard.nextLine();
-                    processInput(keyboard, input);
+                    processInput(input);
                 }
                 
                 // SHUTDOWN         
@@ -130,8 +130,8 @@ public class DeliciousBusiness {
     	
     	// If there are params, get user input for them
     	if (numParams > 0) 
-    		System.out.println("Please input query parameters, or" +
-    		        "press ENTER to auto-fill with common queries");
+    		System.out.println("Please input query parameters, or " +
+    		        "press ENTER to auto-fill with common queries\n");
     	
     	// For num params times
     	for (int j = 0; j < numParams; j++) {
@@ -156,6 +156,9 @@ public class DeliciousBusiness {
             // Prints table header and field data.
             printView(actionStatus, queryHeaders, queryResults);
     	}
+        System.out.println("===(press ENTER to continue)===");
+        keyboard.nextLine();
+    	
     }
     
     
@@ -181,7 +184,7 @@ public class DeliciousBusiness {
         System.out.print(paramName + ": ");
         String ret = keyboard.nextLine();
         if (ret == "\r") {
-            ret = QUERYRUNNER.GetParamText(queryNum, paramNum);
+            ret = QUERYRUNNER.GetParamDefault(queryNum, paramNum);
             System.out.println(ret + "\n");
         }
         return ret;
@@ -197,8 +200,10 @@ public class DeliciousBusiness {
     private static String autoFillParam(int queryNum, int paramNum) {
         String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
         System.out.print(paramName + ": ");
-        String ret = QUERYRUNNER.GetParamText(queryNum, paramNum);
+        String ret = QUERYRUNNER.GetParamDefault(queryNum, paramNum);
         System.out.println(ret + "\n");
+        System.out.println("===(press ENTER to continue)===");
+        keyboard.nextLine();
         return ret;
     }
     
@@ -259,7 +264,7 @@ public class DeliciousBusiness {
     	}
     }
     
-    private static void processInput(Scanner keyboard, String input) {
+    private static void processInput(String input) {
     	if (inMainMenu) {
 	    	switch (input) {
 	        	// Help menu
