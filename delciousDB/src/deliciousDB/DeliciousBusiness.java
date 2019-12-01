@@ -254,7 +254,7 @@ public class DeliciousBusiness {
             for (int i = 0; i < queryResults.length; i++) {
                 for (int j = 0; j < width; j++) {
                     System.out.printf("| %-" + widthArr[j] + "s ", 
-                                            queryResults[i][j]);    // data
+                                    queryResults[i][j].trim());    // data
                 }
                 System.out.print("\n");
             }
