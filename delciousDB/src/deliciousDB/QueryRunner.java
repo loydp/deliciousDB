@@ -62,8 +62,9 @@ public class QueryRunner {
         		null, 
         		false, 
         		false));
+        
         m_queryArray.add(new QueryData(
-        		"Show ingredient inventory for dish at location", 
+        		"Show ingredient inventory for specified dish at specified location", 
         		"SELECT location_name, menu_item_name, ingredient_name, \r\n" + 
         		"	RHI.ingredient_quant AS 'Quantity Needed', \r\n" + 
         		"	RHI.ingredient_quant_unit AS 'Needed Units', \r\n" + 
@@ -90,20 +91,98 @@ public class QueryRunner {
         		new boolean [] {false, false},  
         		false, 
         		true));        
+       
         m_queryArray.add(new QueryData(
-        		"Name", 
-        		"Select * from contact where contact_name like ?", 
-        		new String [] {"CONTACT_NAME"}, 
-        		new boolean [] {true}, 
+        		"Show all dietary restrictions for the menu items in menu plan 1", 
+        		"SELECT DISTINCT menu_item_name, dietary_restr_name\r\n" + 
+        		"FROM menu_plan_composition AS MPC\r\n" + 
+        		"	JOIN menu_item as MI\r\n" + 
+        		"	ON MPC.menu_item_ID = MI.menu_item_ID\r\n" + 
+        		"	JOIN menu_item_has_recipe as MIHR\r\n" + 
+        		"	ON MI.menu_item_ID = MIHR.menu_item_ID\r\n" + 
+        		"	JOIN recipe as R\r\n" + 
+        		"	ON MIHR.recipe_ID = R.recipe_ID\r\n" + 
+        		"	JOIN recipe_has_ingr as RHI\r\n" + 
+        		"	ON R.recipe_ID = RHI.recipe_ID\r\n" + 
+        		"	JOIN ingredient as I\r\n" + 
+        		"	ON RHI.ingredient_ID = I.ingredient_ID\r\n" + 
+        		"	JOIN ingr_has_diet_restr as IHDR\r\n" + 
+        		"	ON I.ingredient_ID = IHDR.ingredient_ID\r\n" + 
+        		"	JOIN dietary_restriction as DR\r\n" + 
+        		"	ON IHDR.dietary_restr_ID = DR.dietary_restr_ID\r\n" + 
+        		"WHERE MPC.menu_ID = 1\r\n" + 
+        		"ORDER BY menu_item_name;", 
+        		null, 
+        		null, 
         		false, 
-        		true));        
+        		false));
+        
         m_queryArray.add(new QueryData(
-        		"Name", 
-        		"insert into contact (contact_id, contact_name, contact_salary) values (?,?,?)",
-        		new String [] {"CONTACT_ID", "CONTACT_NAME", "CONTACT_SALARY"}, 
-        		new boolean [] {false, false, false}, 
-        		true, true));
-                       
+        		"Show all seasonal vendor products within specified time range", 
+        		"SELECT	ingredient.ingredient_name, vendor_product.product_id,\r\n" + 
+        		"	vendor_product.product_season_start, vendor_product.product_season_end\r\n" + 
+        		"FROM		vendor_product natural join ingredient\r\n" + 
+        		"WHERE	vendor_product.product_limited_avail = 1\r\n" + 
+        		"AND		vendor_product.product_season_start < ?\r\n" + 
+        		"AND		vendor_product.product_season_end > ?\r\n" + 
+        		"ORDER BY  	vendor_product.product_season_start;",
+        		new String [] {"Start date (yyyy-mm-dd)", "End date (yyy-mm-dd)"}, 
+        		new boolean [] {false, false}, 
+        		false, true));
+        
+        m_queryArray.add(new QueryData(
+        		"Show the minimum total amount of miles products need to travel to make a menu item",
+        		"Select recipe.recipe_id, recipe.recipe_name,\r\n" + 
+        		"sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) as 'Total minimum distance ingredients traveled'\r\n" + 
+        		"\r\n" + 
+        		"From\r\n" + 
+        		"menu_plan_composition natural join menu_item natural join menu_item_has_recipe natural join recipe natural join recipe_has_ingr\r\n" + 
+        		"natural join ingredient natural join vendor_product natural join vendor\r\n" + 
+        		"\r\n" + 
+        		"where (vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) <=\r\n" + 
+        		"(select min(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles)\r\n" + 
+        		"    From vendor_product natural join vendor\r\n" + 
+        		"	where vendor_product.ingredient_id = ingredient.ingredient_id)\r\n" + 
+        		"\r\n" + 
+        		"group by menu_item_has_recipe.recipe_id\r\n" + 
+        		"order by sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) asc;\r\n" + 
+        		"",
+        		null, 
+        		null, 
+        		false, false));
+        
+        m_queryArray.add(new QueryData(
+        		"Show top selling dishes in the last month for all locations", 
+        		"SELECT menu_item.menu_item_name, sum(item_quantity) as 'Total Dishes Sold'\r\n" + 
+        		"FROM customer_check\r\n" + 
+        		"	JOIN check_item\r\n" + 
+        		"	ON check_item.check_number = customer_check.check_number\r\n" + 
+        		"	JOIN menu_item\r\n" + 
+        		"	ON menu_item.menu_item_ID = check_item.menu_item_ID\r\n" + 
+        		"WHERE (customer_check.check_date >= ('2019-10-09') \r\n" + 
+        		"	AND customer_check.check_date <= '2019-11-09')\r\n" + 
+        		"GROUP BY menu_item_name\r\n" + 
+        		"ORDER BY sum(item_quantity) DESC;",
+        		null,
+        		null, 
+        		false, false));
+        
+        m_queryArray.add(new QueryData(
+        		"Show all dietary restrictions in database", 
+        		"SELECT	* from dietary_restriction \n" +
+        		"ORDER BY dietary_restr_ID;",
+        		null,
+        		null, 
+        		false, false));
+        
+        // INSERT
+        m_queryArray.add(new QueryData(
+        		"Add a dietary restriction to database", 
+        		"insert into dietary_restriction (dietary_restr_id, dietary_restr_name) values (?,?);",
+        		new String [] {"Dietary restriction ID", "Dietary restriction name"}, 
+        		new boolean [] {false, false}, 
+        		true, true));    
+        
     }
        
 

@@ -114,7 +114,8 @@ public class DeliciousBusiness {
     
     
     private static void runQuery(int i) {
-        // Get parameters for query
+        boolean actionStatus;
+    	// Get parameters for query
     	int numParams = QUERYRUNNER.GetParameterAmtForQuery(i);
     	String[] params = new String[numParams];
     	
@@ -127,18 +128,19 @@ public class DeliciousBusiness {
     
     	// Determine proper action for query type
     	if (QUERYRUNNER.isActionQuery(i)) {
-    		QUERYRUNNER.ExecuteUpdate(i, params);
+    		actionStatus = QUERYRUNNER.ExecuteUpdate(i, params);
+    		// Need to print successful update 
+    		printUpdateResult(actionStatus, QUERYRUNNER.GetUpdateAmount());
     	}
     	else {
-    		QUERYRUNNER.ExecuteQuery(i, params);
+    		actionStatus = QUERYRUNNER.ExecuteQuery(i, params);
+    		// Gathers table header and field data.
+            String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
+            String[][] queryResults = QUERYRUNNER.GetQueryData();
+            
+            // Prints table header and field data.
+            printView(actionStatus, queryHeaders, queryResults);
     	}
-        
-        // Gathers table header and field data.
-        String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
-        String[][] queryResults = QUERYRUNNER.GetQueryData();
-        
-        // Prints table header and field data.
-        printView(queryHeaders, queryResults);
     }
     
     
@@ -148,40 +150,55 @@ public class DeliciousBusiness {
      * This may be expanded later.
      * @param queryResults
      */
-    private static void printView( String[] queryHeaders, 
+    private static void printView(boolean executed, String[] queryHeaders, 
                                   String[][] queryResults) {
-        int attributeCount = 0;
         
-        for (int i = 0; i < attributeCount * 22; i++)
-            System.out.print("-");                      // dashed line
-        
-        System.out.println();
-        
-        for (String attribute : queryHeaders) {
-            System.out.printf("| %-20s", attribute);    // header
-            attributeCount++;
-        }
-            
-        System.out.println();
-        
-        for (int i = 0; i < attributeCount * 22; i++)
-            System.out.print("-");                      // dashed line
-
-        System.out.println();
-        
-        for (String[] row : queryResults) {
-            for (String field : row) {
-                System.out.printf("| %-20s", field);    // data
-            }
-            System.out.print("\n");
-        }
-        
-        for (int i = 0; i < attributeCount * 22; i++)
-            System.out.print("-");                      // dashed line
-        
-        System.out.println();
+    	if (executed) {
+	    	int attributeCount = 0;
+	        
+	        for (int i = 0; i < attributeCount * 22; i++)
+	            System.out.print("-");                      // dashed line
+	        
+	        System.out.println();
+	        
+	        for (String attribute : queryHeaders) {
+	            System.out.printf("| %-20s", attribute);    // header
+	            attributeCount++;
+	        }
+	            
+	        System.out.println();
+	        
+	        for (int i = 0; i < attributeCount * 22; i++)
+	            System.out.print("-");                      // dashed line
+	
+	        System.out.println();
+	        
+	        for (String[] row : queryResults) {
+	            for (String field : row) {
+	                System.out.printf("| %-20s", field);    // data
+	            }
+	            System.out.print("\n");
+	        }
+	        
+	        for (int i = 0; i < attributeCount * 22; i++)
+	            System.out.print("-");                      // dashed line
+	        
+	        System.out.println();
+    	}
+    	else {
+    		System.out.println("Error running query.");
+    	}
+    	
     }
     
+    private static void printUpdateResult(boolean updated, int numRows) {
+    	if (updated) {
+    		System.out.println("\n" + numRows + " row(s) successfully updated.\n");
+    	}
+    	else {
+    		System.out.println("Update failed.");
+    	}
+    }
     
     private static void processInput(String input) {
     	if (inMainMenu) {
