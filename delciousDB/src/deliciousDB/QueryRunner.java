@@ -123,8 +123,8 @@ public class QueryRunner {
         		"	vendor_product.product_season_start, vendor_product.product_season_end\r\n" + 
         		"FROM		vendor_product natural join ingredient\r\n" + 
         		"WHERE	vendor_product.product_limited_avail = 1\r\n" + 
-        		"AND		vendor_product.product_season_start < ?\r\n" + 
-        		"AND		vendor_product.product_season_end > ?\r\n" + 
+        		"AND		vendor_product.product_season_start > ?\r\n" + 
+        		"AND		vendor_product.product_season_end < ?\r\n" + 
         		"ORDER BY  	vendor_product.product_season_start;",
         		new String [] {"Start date (yyyy-mm-dd)", "End date (yyy-mm-dd)"}, 
         		new boolean [] {false, false}, 
