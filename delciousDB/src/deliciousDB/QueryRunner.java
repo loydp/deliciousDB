@@ -92,7 +92,7 @@ public class QueryRunner {
         		new boolean [] {false, false},  
         		false, 
         		true,
-                new String[] {"Morrocan Spiced Seitan", "The Bleu Danube"}));        
+                new String[] {"Moroccan Spiced Seitan", "The Bleu Danube"}));        
        
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions for the menu items in menu plan 1", 
