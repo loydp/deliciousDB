@@ -57,7 +57,9 @@ public class QueryRunner {
         */
         m_queryArray.add(new QueryData(
         		"Show all ingredients in database", 
-        		"Select * from ingredient", 
+        		"Select ingredient_id as 'Ingredient'," + 
+        		" ingredient_name as 'Ingredient Name'," + 
+        		" ingredient_category as 'Category' from ingredient", 
         		null, 
         		null, 
         		false, 
@@ -134,23 +136,20 @@ public class QueryRunner {
         		false, true,
                 new String[] {"2019-09-01", "2023-04-05"}));
         
+        // TODO messed up formatting
         m_queryArray.add(new QueryData(
         		"Show the minimum total amount of miles products need to travel to make a menu item",
-        		"Select recipe.recipe_id, recipe.recipe_name,\r\n" + 
-        		"sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) as 'Total minimum distance ingredients traveled'\r\n" + 
-        		"\r\n" + 
-        		"From\r\n" + 
-        		"menu_plan_composition natural join menu_item natural join menu_item_has_recipe natural join recipe natural join recipe_has_ingr\r\n" + 
-        		"natural join ingredient natural join vendor_product natural join vendor\r\n" + 
-        		"\r\n" + 
-        		"where (vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) <=\r\n" + 
-        		"(select min(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles)\r\n" + 
-        		"    From vendor_product natural join vendor\r\n" + 
-        		"	where vendor_product.ingredient_id = ingredient.ingredient_id)\r\n" + 
-        		"\r\n" + 
-        		"group by menu_item_has_recipe.recipe_id\r\n" + 
-        		"order by sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) asc;\r\n" + 
-        		"",
+        		"Select recipe.recipe_id as 'Recipe ID', recipe.recipe_name as 'Recipe Name', " + 
+        		"sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) as 'Total Min distance traveled' " + 
+        		"From " + 
+        		"menu_plan_composition natural join menu_item natural join menu_item_has_recipe natural join recipe natural join recipe_has_ingr " + 
+        		"natural join ingredient natural join vendor_product natural join vendor " + 
+        		"where (vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) <= " + 
+        		"(select min(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) " + 
+        		"    From vendor_product natural join vendor " + 
+        		"	where vendor_product.ingredient_id = ingredient.ingredient_id) " +
+        		"group by menu_item_has_recipe.recipe_id " + 
+        		"order by sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) asc",
         		null, 
         		null, 
         		false, 
@@ -159,7 +158,7 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show top selling dishes in the last month for all locations", 
-        		"SELECT menu_item.menu_item_name, sum(item_quantity) as 'Total Dishes Sold'\r\n" + 
+        		"SELECT menu_item.menu_item_name as 'Menu Item', sum(item_quantity) as 'Total Dishes Sold'\r\n" + 
         		"FROM customer_check\r\n" + 
         		"	JOIN check_item\r\n" + 
         		"	ON check_item.check_number = customer_check.check_number\r\n" + 
@@ -177,7 +176,7 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions in database", 
-        		"SELECT	* from dietary_restriction \n" +
+        		"SELECT	dietary_restr_ID as 'Restr. ID', dietary_restr_name as 'Dietary Restriction Name' from dietary_restriction \n" +
         		"ORDER BY dietary_restr_ID;",
         		null,
         		null, 
