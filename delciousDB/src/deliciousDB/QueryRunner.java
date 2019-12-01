@@ -61,7 +61,8 @@ public class QueryRunner {
         		null, 
         		null, 
         		false, 
-        		false));
+        		false,
+        		null));
         
         m_queryArray.add(new QueryData(
         		"Show ingredient inventory for specified dish at specified location", 
@@ -90,7 +91,8 @@ public class QueryRunner {
         		new String [] {"menu item name", "location name"}, 
         		new boolean [] {false, false},  
         		false, 
-        		true));        
+        		true,
+                new String[] {"Morrocan Spiced Seitan", "The Bleu Danube"}));        
        
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions for the menu items in menu plan 1", 
@@ -115,7 +117,8 @@ public class QueryRunner {
         		null, 
         		null, 
         		false, 
-        		false));
+        		false,
+        		null));
         
         m_queryArray.add(new QueryData(
         		"Show all seasonal vendor products within specified time range", 
@@ -123,12 +126,13 @@ public class QueryRunner {
         		"	vendor_product.product_season_start, vendor_product.product_season_end\r\n" + 
         		"FROM		vendor_product natural join ingredient\r\n" + 
         		"WHERE	vendor_product.product_limited_avail = 1\r\n" + 
-        		"AND		vendor_product.product_season_start < ?\r\n" + 
-        		"AND		vendor_product.product_season_end > ?\r\n" + 
+        		"AND		vendor_product.product_season_start > ?\r\n" + 
+        		"AND		vendor_product.product_season_end < ?\r\n" + 
         		"ORDER BY  	vendor_product.product_season_start;",
         		new String [] {"Start date (yyyy-mm-dd)", "End date (yyy-mm-dd)"}, 
         		new boolean [] {false, false}, 
-        		false, true));
+        		false, true,
+                new String[] {"2019-09-01", "2023-04-05"}));
         
         m_queryArray.add(new QueryData(
         		"Show the minimum total amount of miles products need to travel to make a menu item",
@@ -149,7 +153,9 @@ public class QueryRunner {
         		"",
         		null, 
         		null, 
-        		false, false));
+        		false, 
+        		false, 
+        		null));
         
         m_queryArray.add(new QueryData(
         		"Show top selling dishes in the last month for all locations", 
@@ -165,7 +171,9 @@ public class QueryRunner {
         		"ORDER BY sum(item_quantity) DESC;",
         		null,
         		null, 
-        		false, false));
+        		false, 
+        		false, 
+        		null));
         
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions in database", 
@@ -173,7 +181,9 @@ public class QueryRunner {
         		"ORDER BY dietary_restr_ID;",
         		null,
         		null, 
-        		false, false));
+        		false, 
+        		false,
+        		null));
         
         // INSERT
         m_queryArray.add(new QueryData(
@@ -181,7 +191,9 @@ public class QueryRunner {
         		"insert into dietary_restriction (dietary_restr_id, dietary_restr_name) values (?,?);",
         		new String [] {"Dietary restriction ID", "Dietary restriction name"}, 
         		new boolean [] {false, false}, 
-        		true, true));    
+        		true, 
+        		true,
+        		new String[] {"120", "Pork"}));    
         
     }
        
