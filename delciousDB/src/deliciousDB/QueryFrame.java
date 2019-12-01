@@ -29,21 +29,21 @@ public class QueryFrame extends javax.swing.JFrame {
  * @param queryrunnerObj 
  */
     public QueryFrame(QueryRunner queryrunnerObj) {
-	dbPicture.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	dbPicture.setToolTipText("Delicious Business Family Photo");
-	dbPicture.setIcon(new ImageIcon(QueryFrame.class.getResource("/deliciousDB/DeliciousBusinessSmall.png")));
-	
-	
-	Image dbImage = new ImageIcon(this.getClass().getResource("/deliciousDB/DeliciousBusinessSmall.png")).getImage();
-    dbPicture.setIcon(new ImageIcon(dbImage));
-    dbPicture.setBounds(1100, 40, 110, 140);
-    getContentPane().add(dbPicture);
-	
-	
-	setTitle("Delicious Business");
-	setPreferredSize(new Dimension(1250, 990));
-	setIconImage(Toolkit.getDefaultToolkit().getImage(QueryFrame.class.getResource("/deliciousDB/farmer.ico")));
-	getContentPane().setBackground(new Color(240, 230, 140));
+		dbPicture.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		dbPicture.setToolTipText("Delicious Business Family Photo");
+		dbPicture.setIcon(new ImageIcon(QueryFrame.class.getResource("/deliciousDB/DeliciousBusinessSmall.png")));
+		
+		
+		Image dbImage = new ImageIcon(this.getClass().getResource("/deliciousDB/DeliciousBusinessSmall.png")).getImage();
+	    dbPicture.setIcon(new ImageIcon(dbImage));
+	    dbPicture.setBounds(1100, 40, 110, 140);
+	    getContentPane().add(dbPicture);
+		
+		
+		setTitle("Delicious Business");
+		setPreferredSize(new Dimension(1250, 990));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(QueryFrame.class.getResource("/deliciousDB/farmer.ico")));
+		getContentPane().setBackground(new Color(240, 230, 140));
 	
         initComponents();
         m_parmlabels = new JLabel[]{jLabel1, jLabel2, jLabel3, jLabel4, jLabel9, jLabel10, jLabel11, jLabel12};        
@@ -320,6 +320,7 @@ public class QueryFrame extends javax.swing.JFrame {
          
         if (this.m_queryrunner.isParameterQuery(m_queryChoice))
         {           
+        	String[] defaultValues = m_queryrunner.GetQueryDefaults(m_queryChoice);
             this.jPanel1.setVisible(true);                        
             int nAmt = this.m_queryrunner.GetParameterAmtForQuery(m_queryChoice);
             for (int i=0; i< nAmt; i++)
@@ -327,7 +328,10 @@ public class QueryFrame extends javax.swing.JFrame {
                 m_parmlabels[i].setVisible(true);
                 m_parmlabels[i].setText(m_queryrunner.GetParamText(m_queryChoice, i));
                 m_textvals[i].setVisible(true);
-                m_textvals[i].setText("");
+                if((defaultValues[i] != null) && (defaultValues[i] != ""))
+					m_textvals[i].setText(defaultValues[i]);
+                else
+                	m_textvals[i].setText("");
             }
             
             for (int i = nAmt; i < 8; i++)
