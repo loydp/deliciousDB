@@ -19,6 +19,7 @@ import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Cursor;
+import java.awt.Font;
 
 public class QueryFrame extends javax.swing.JFrame {
 
@@ -123,6 +124,8 @@ public class QueryFrame extends javax.swing.JFrame {
         jPasswordField1.setToolTipText("Enter password (will be disguised with *)");
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jLabelQueryTitle = new javax.swing.JLabel();
+        jLabelQueryTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -204,8 +207,8 @@ public class QueryFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 980, 130));
 
         jPanel2.setLayout(new java.awt.BorderLayout());
-        //getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 980, 240));
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 1190, 580));
+        //getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 1190, 580));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 1190, 530));
 
         jComboBoxQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -253,6 +256,9 @@ public class QueryFrame extends javax.swing.JFrame {
         jLabel14.setText("VVV");
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 7, 300, -1));
 
+        jLabelQueryTitle.setFont(new java.awt.Font("Tahoma", 0, 18));
+        getContentPane().add(jLabelQueryTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 1190, 30));
+        
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -310,6 +316,7 @@ public class QueryFrame extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         
         jTextArea2.setText("");
+        jLabelQueryTitle.setText("");
         String szChoice = (String)jComboBoxQuery.getSelectedItem();        
         String szStripChoice = szChoice.substring(6);
         m_queryChoice = Integer.parseInt(szStripChoice)-1;        
@@ -360,9 +367,14 @@ public class QueryFrame extends javax.swing.JFrame {
  */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        jTextArea2.setText("");        
+        jTextArea2.setText("");    
+        
         if (this.m_queryrunner.isActionQuery(m_queryChoice) == false)
+        {
             jPanel2.setVisible(true);
+            jLabelQueryTitle.setVisible(true);
+            jLabelQueryTitle.setText(this.m_queryrunner.GetQueryName(m_queryChoice));
+        }
         
         int nAmt = this.m_queryrunner.GetParameterAmtForQuery(m_queryChoice);
         String [] parmstring={};
@@ -445,6 +457,7 @@ public class QueryFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel jLabelQueryTitle;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -474,6 +487,10 @@ public class QueryFrame extends javax.swing.JFrame {
      * @wbp.nonvisual location=771,69
      */
     private final JLabel dbPicture = new JLabel("New label");
+    /**
+     * @wbp.nonvisual location=461,409
+     */
+
     
 
 }
