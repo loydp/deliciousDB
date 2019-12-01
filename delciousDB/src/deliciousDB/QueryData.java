@@ -82,6 +82,10 @@ public class QueryData {
         return m_isParms;
     }
     
+    String[] getQueryDefaults() {
+        return m_defaults;
+    }
+    
     private String[] m_defaults;
     private String queryName;
     private String m_queryString;

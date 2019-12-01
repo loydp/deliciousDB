@@ -221,6 +221,12 @@ public class QueryRunner {
         return e.GetQueryString();        
     }
     
+    public String[] GetQueryDefaults(int queryChoice)
+    {
+        QueryData e=m_queryArray.get(queryChoice);
+        return e.getQueryDefaults();        
+    }
+    
     public String[] GetQueryNames() {
     	String[] queryNames = new String[m_queryArray.size()];
     	for (int i = 0; i < m_queryArray.size(); i++) {

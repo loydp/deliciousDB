@@ -26,6 +26,7 @@ public class DeliciousBusiness {
             {
                 // CONNECTION
                 boolean connected = false;
+                System.out.println();
                 do {
                     System.out.println(
                         "\nWhich database would you like to connect to?");
@@ -245,8 +246,7 @@ public class DeliciousBusiness {
     			}
     		}
     	}
-    
-    }    
+    }
 
     private static void helpMenu(Scanner keyboard) {
         System.out.println(HELP_MSG);
