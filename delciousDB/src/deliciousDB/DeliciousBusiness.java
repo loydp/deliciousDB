@@ -113,7 +113,15 @@ public class DeliciousBusiness {
     }
     
     
-    private static void runQuery(int i) {
+    /**
+     * RunQuery runs a single query, including asking for input if that is
+     * necessary. If it's being run as part of an iteration in autoRunQuery,
+     * it will auto-fill necessary parameters with default values.
+     * @param i The index of a query to be run
+     * @param autoRun This function operates slightly differently if called by
+     * autoRunQueries(). True means it's being auto-run.
+     */
+    private static void runQuery(int i, boolean autoRun) {
         boolean actionStatus;
     	// Get parameters for query
     	int numParams = QUERYRUNNER.GetParameterAmtForQuery(i);
@@ -124,11 +132,15 @@ public class DeliciousBusiness {
     	if (numParams > 0) 
     		System.out.println("Please input query parameters, or" +
     		        "press ENTER to auto-fill with common queries");
-    	//TODO
-    	// For num params times, 
-    	for (int j = 0; j < numParams; j++) 
-    		params[j] = getParamFromUser(i, j);
-    
+    	
+    	// For num params times
+    	for (int j = 0; j < numParams; j++) {
+    		if (autoRun = false)
+    		    params[j] = getParamFromUser(i, j);
+    		else
+                params[j] = autoFillParam(i, j);
+    	}
+    	
     	// Determine proper action for query type
     	if (QUERYRUNNER.isActionQuery(i)) {
     		actionStatus = QUERYRUNNER.ExecuteUpdate(i, params);
@@ -146,14 +158,50 @@ public class DeliciousBusiness {
     	}
     }
     
+    
+    //TODO reinstate "add dietary restriction" by removing the - 1 in the initial for loop
+    /**
+     * Runs through each query, using default values to fill in parameters.
+     */
+    public static void runAllQueries() {
+        int numQueries = QUERYRUNNER.GetTotalQueries();
+        for (int i = 0; i < numQueries - 1; i++) {
+            runQuery(i, true);
+        }
+    }
+    
+    /**
+     * Prompts and passes on a necessary parameter from the user.
+     * @param queryNum
+     * @param paramNum
+     * @return
+     */
     private static String getParamFromUser(int queryNum, int paramNum) {
         String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
         System.out.print(paramName + ": ");
         String ret = keyboard.nextLine();
-        if (ret == "\r")
+        if (ret == "\r") {
             ret = QUERYRUNNER.GetParamText(queryNum, paramNum);
+            System.out.println(ret + "\n");
+        }
         return ret;
     }
+    
+    /**
+     * Autofills necessary parameters. Used as part of the runAllQueries
+     * function.
+     * @param queryNum
+     * @param paramNum
+     * @return string rer
+     */
+    private static String autoFillParam(int queryNum, int paramNum) {
+        String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
+        System.out.print(paramName + ": ");
+        String ret = QUERYRUNNER.GetParamText(queryNum, paramNum);
+        System.out.println(ret + "\n");
+        return ret;
+    }
+    
     
     /**
      * Displays the results of queries, first using attribute names and
@@ -222,7 +270,7 @@ public class DeliciousBusiness {
 	            	inMainMenu = false;
 	                break;
 	            case "2" :
-	                // TODO
+	                runAllQueries();
 	                break;
 	            case "x" :
 	            case "X" :
@@ -233,7 +281,7 @@ public class DeliciousBusiness {
 	                usingProgram = false;
 	                break;
 	            default :
-	                System.out.println("Input not recognized, try again.");
+	                System.out.println("\nInput not recognized, try again:");
 	    	}        
     	}
     	else {
@@ -241,10 +289,10 @@ public class DeliciousBusiness {
     		try {
     			int i = Integer.parseInt(input);
     			if (i >= 0 && i < queryNames.length) {
-    				runQuery(i);
+    				runQuery(i, false);
     			}
     			else {
-    				System.out.println("Invalid query number, try again.");
+    				System.out.println("Invalid query number, try again:");
     			}
     		}
     		catch (NumberFormatException nfe) {
@@ -252,7 +300,7 @@ public class DeliciousBusiness {
         			inMainMenu = true;
         		}
     			else {
-    				System.out.println("Input not recognized, try again.");
+    				System.out.println("Input not recognized, try again:");
     			}
     		}
     	}
