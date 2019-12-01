@@ -26,7 +26,6 @@ public class DeliciousBusiness {
             {
                 // CONNECTION
                 boolean connected = false;
-                System.out.println();
                 do {
                     System.out.println(
                         "\nWhich database would you like to connect to?");
@@ -118,12 +117,15 @@ public class DeliciousBusiness {
         boolean actionStatus;
     	// Get parameters for query
     	int numParams = QUERYRUNNER.GetParameterAmtForQuery(i);
+    	
     	String[] params = new String[numParams];
     	
     	// If there are params, get user input for them
     	if (numParams > 0) 
-    		System.out.println("Please input query parameters");
-    	
+    		System.out.println("Please input query parameters, or" +
+    		        "press ENTER to auto-fill with common queries");
+    	//TODO
+    	// For num params times, 
     	for (int j = 0; j < numParams; j++) 
     		params[j] = getParamFromUser(i, j);
     
@@ -144,6 +146,14 @@ public class DeliciousBusiness {
     	}
     }
     
+    private static String getParamFromUser(int queryNum, int paramNum) {
+        String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
+        System.out.print(paramName + ": ");
+        String ret = keyboard.nextLine();
+        if (ret == "\r")
+            ret = QUERYRUNNER.GetParamText(queryNum, paramNum);
+        return ret;
+    }
     
     /**
      * Displays the results of queries, first using attribute names and
@@ -262,12 +272,6 @@ public class DeliciousBusiness {
     		System.out.println();
     	}
     	System.out.println("X. Back to main menu");
-    }
-    
-    private static String getParamFromUser(int queryNum, int paramNum) {
-    	String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
-    	System.out.print(paramName + ": ");
-    	return keyboard.nextLine();
     }
     
     private static final QueryRunner QUERYRUNNER = new QueryRunner();

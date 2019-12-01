@@ -62,6 +62,10 @@ public class QueryData {
         return m_arrayParms[index];
     }
     
+    String GetQueryDefault(int index) {
+        return m_defaults[index];
+    }
+    
     boolean GetLikeParam(int index)
     {
         return m_arrayLikeParms[index];
@@ -80,10 +84,6 @@ public class QueryData {
     boolean IsQueryParm()
     {
         return m_isParms;
-    }
-    
-    String[] getQueryDefaults() {
-        return m_defaults;
     }
     
     private String[] m_defaults;

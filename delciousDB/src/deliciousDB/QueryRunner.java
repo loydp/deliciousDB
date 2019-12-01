@@ -214,17 +214,17 @@ public class QueryRunner {
        QueryData e=m_queryArray.get(queryChoice);        
        return e.GetParamText(parmnum); 
     }   
-
+    
+    public String GetParamDefault(int queryChoice, int parmnum )
+    {
+       QueryData e=m_queryArray.get(queryChoice);        
+       return e.GetQueryDefault(parmnum);
+    }
+    
     public String GetQueryText(int queryChoice)
     {
         QueryData e=m_queryArray.get(queryChoice);
         return e.GetQueryString();        
-    }
-    
-    public String[] GetQueryDefaults(int queryChoice)
-    {
-        QueryData e=m_queryArray.get(queryChoice);
-        return e.getQueryDefaults();        
     }
     
     public String[] GetQueryNames() {
