@@ -34,12 +34,10 @@ public class QueryFrame extends javax.swing.JFrame {
 		dbPicture.setToolTipText("Delicious Business Family Photo");
 		dbPicture.setIcon(new ImageIcon(QueryFrame.class.getResource("/deliciousDB/DeliciousBusinessSmall.png")));
 		
-		
 		Image dbImage = new ImageIcon(this.getClass().getResource("/deliciousDB/DeliciousBusinessSmall.png")).getImage();
 	    dbPicture.setIcon(new ImageIcon(dbImage));
 	    dbPicture.setBounds(1100, 40, 110, 140);
 	    getContentPane().add(dbPicture);
-		
 		
 		setTitle("Delicious Business");
 		setPreferredSize(new Dimension(1250, 990));
@@ -56,7 +54,6 @@ public class QueryFrame extends javax.swing.JFrame {
 
         for (int i=0; i < nAmt; i++)
         {
-            //this.jComboBoxQuery.addItem("Query " + (i+1));
         	this.jComboBoxQuery.addItem((i+1) + ". " + m_queryrunner.GetQueryName(i));
         }
         jComboBoxQuery.setEnabled(false);
@@ -208,7 +205,6 @@ public class QueryFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 980, 130));
 
         jPanel2.setLayout(new java.awt.BorderLayout());
-        //getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 1190, 580));
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 1190, 530));
 
         jComboBoxQuery.addActionListener(new java.awt.event.ActionListener() {
@@ -320,19 +316,12 @@ public class QueryFrame extends javax.swing.JFrame {
         jLabelQueryTitle.setText("");
         
         String szChoice = (String)jComboBoxQuery.getSelectedItem();        
-        //String szStripChoice = szChoice.substring(6);
         String szStripChoice = szChoice.substring(0,1);
         m_queryChoice = Integer.parseInt(szStripChoice)-1;        
         String szQuery = m_queryrunner.GetQueryText(m_queryChoice);
         this.jTextArea1.setText(szQuery);
         System.out.println("choice is " + szChoice);
         this.jPanel2.setVisible(false);  
-        
-        
-  //      jLabelQueryTitle.setVisible(true);
-   //     jLabelQueryTitle.setText(this.m_queryrunner.GetQueryName(m_queryChoice));
-         
-        
         
         if (this.m_queryrunner.isParameterQuery(m_queryChoice))
         {           
@@ -428,12 +417,9 @@ public class QueryFrame extends javax.swing.JFrame {
                 m_jTable = new JTable(allData, headers);
                 
                 m_jTable.setBounds(100, 100, 100, 80);
-                //Color ivory=new Color(255,255,208);
-                //Color newColor=new Color(190,240,140);
-                Color newColor=new Color(230,255,200);
+                Color lightYellow = new Color(230,255,200);
                 m_jTable.setOpaque(false);
-                //m_jTable.setBackground(ivory);
-                m_jTable.setBackground(newColor);     
+                m_jTable.setBackground(lightYellow);     
                 m_scrollPane = new JScrollPane(m_jTable);
                 jPanel2.add(m_scrollPane);// add table in panel using add() method                      
                 this.setVisible(true);                
