@@ -300,6 +300,9 @@ public class QueryRunner {
         boolean bOK = true;
         QueryData e=m_queryArray.get(queryChoice);        
         bOK = m_jdbcData.ExecuteQuery(e.GetQueryString(), parms, e.GetAllLikeParams());
+        if (!bOK) {
+        	m_error = m_jdbcData.GetError(); 
+        }
         return bOK;
     }
     
@@ -309,6 +312,9 @@ public class QueryRunner {
         QueryData e=m_queryArray.get(queryChoice);        
         bOK = m_jdbcData.ExecuteUpdate(e.GetQueryString(), parms);
         m_updateAmount = m_jdbcData.GetUpdateCount();
+        if (!bOK) {
+        	m_error = m_jdbcData.GetError();  
+        }
         return bOK;
     }   
     

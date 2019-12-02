@@ -79,7 +79,7 @@ public class DeliciousBusiness {
     	String typeLC = type.toLowerCase();
     	switch (typeLC) {
     		case "default":
-    			connected = QUERYRUNNER.Connect(DEFAULT_HOST, DEFAULT_USER, 
+    			connected = QUERYRUNNER.Connect(Defaults.HOSTNAME, DEFAULT_USER, 
     					DEFAULT_PASSWORD, DEFAULT_DB);
     			printConnectionStatus(connected, DEFAULT_DB);
     			return connected;

@@ -280,6 +280,7 @@ public class QueryFrame extends javax.swing.JFrame {
                jComboBoxQuery.setEnabled(true);
                jBtnRunQuery.setEnabled(true);
                jConnectButton.setToolTipText("Click to disconnect from your database");
+               jTextArea2.setText(("Connection status: success"));
            }
         }
         else
@@ -291,6 +292,7 @@ public class QueryFrame extends javax.swing.JFrame {
                jComboBoxQuery.setEnabled(true);
                jBtnRunQuery.setEnabled(true);
                jConnectButton.setToolTipText("Click to connect to your database");
+               jTextArea2.setText(("Disconnection status: success"));
            }
         }
         
@@ -422,7 +424,9 @@ public class QueryFrame extends javax.swing.JFrame {
                 m_jTable.setBackground(lightYellow);     
                 m_scrollPane = new JScrollPane(m_jTable);
                 jPanel2.add(m_scrollPane);// add table in panel using add() method                      
-                this.setVisible(true);                
+                this.setVisible(true);
+                this.jTextArea2.setText("Query run status: success");
+                
             }
             else
             {
