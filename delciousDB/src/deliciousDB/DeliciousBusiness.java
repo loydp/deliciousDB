@@ -79,7 +79,7 @@ public class DeliciousBusiness {
     	String typeLC = type.toLowerCase();
     	switch (typeLC) {
     		case "default":
-    			connected = QUERYRUNNER.Connect(DEFAULT_HOST, DEFAULT_USER, 
+    			connected = QUERYRUNNER.Connect(Defaults.HOSTNAME, DEFAULT_USER, 
     					DEFAULT_PASSWORD, DEFAULT_DB);
     			printConnectionStatus(connected, DEFAULT_DB);
     			return connected;
@@ -118,8 +118,8 @@ public class DeliciousBusiness {
      * necessary. If it's being run as part of an iteration in autoRunQuery,
      * it will auto-fill necessary parameters with default values.
      * @param i The index of a query to be run
-     * @param autoRun This function operates slightly differently if called by
-     * autoRunQueries(). True means it's being auto-run.
+     * @param autoRun Boolean indicating if this function is being called by
+     * autoRunQuery.
      */
     private static void runQuery(int i, boolean autoRun) {
         boolean actionStatus;
@@ -131,27 +131,15 @@ public class DeliciousBusiness {
     	// If there are params, get user input for them
     	if (numParams > 0) 
     		System.out.println("Please input query parameters, or " +
-    		        "press ENTER to auto-fill with common queries\n");
+    		        "press ENTER to auto-fill\n");
     	
     	// For num params times
     	for (int j = 0; j < numParams; j++) {
-    		if (autoRun = false)
+    		if (autoRun == false)
     		    params[j] = getParamFromUser(i, j);
     		else
                 params[j] = autoFillParam(i, j);
     	}
-    	/*
-    	Available queries (enter number to run): 
-    	    0. Show all ingredients in database
-    	    1. Show ingredient inventory for specified dish at specified location
-    	    2. Show all dietary restrictions for the menu items in menu plan 1
-    	    3. Show all seasonal vendor products within specified time range
-    	    4. Show the minimum total amount of miles products need to travel to make a menu item
-    	    5. Show top selling dishes in the last month for all locations
-    	    6. Show all dietary restrictions in database
-    	    7. Add a dietary restriction to database
-    	    X. Back to main menu
-    	*/
     	
     	// Determine proper action for query type
     	if (QUERYRUNNER.isActionQuery(i)) {
@@ -169,7 +157,7 @@ public class DeliciousBusiness {
             printView(actionStatus, queryHeaders, queryResults);
     	}
     	
-    	if (i < QUERYRUNNER.GetTotalQueries() - 2) {
+    	if (autoRun == true || i < QUERYRUNNER.GetTotalQueries() - 2) {
             System.out.println(">> (press ENTER to continue)");
             keyboard.nextLine();
     	}
@@ -198,9 +186,9 @@ public class DeliciousBusiness {
         String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
         System.out.print(paramName + ": ");
         String ret = keyboard.nextLine();
-        if (ret == "\r") {
+        if (ret.isEmpty()) {
             ret = QUERYRUNNER.GetParamDefault(queryNum, paramNum);
-            System.out.println(ret + "\n");
+            System.out.print(ret + "\n");
         }
         return ret;
     }
@@ -210,7 +198,7 @@ public class DeliciousBusiness {
      * function.
      * @param queryNum
      * @param paramNum
-     * @return string rer
+     * @return string ret
      */
     private static String autoFillParam(int queryNum, int paramNum) {
         String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
@@ -231,41 +219,50 @@ public class DeliciousBusiness {
                                   String[][] queryResults) {
         
     	if (executed) {
-	    	int attributeCount = 0;
-	        
-	        for (int i = 0; i < attributeCount * 22; i++)
-	            System.out.print("-");                      // dashed line
-	        
-	        System.out.println();
-	        
-	        for (String attribute : queryHeaders) {
-	            System.out.printf("| %-20s", attribute);    // header
-	            attributeCount++;
-	        }
-	            
-	        System.out.println();
-	        
-	        for (int i = 0; i < attributeCount * 22; i++)
-	            System.out.print("-");                      // dashed line
-	
-	        System.out.println();
-	        
-	        for (String[] row : queryResults) {
-	            for (String field : row) {
-	                System.out.printf("| %-20s", field);    // data
-	            }
-	            System.out.print("\n");
-	        }
-	        
-	        for (int i = 0; i < attributeCount * 22; i++)
-	            System.out.print("-");                      // dashed line
-	        
-	        System.out.println();
+    	    int width = queryHeaders.length;
+    	    int totalWidth = 0;
+    	    int[] widthArr = new int[width];
+    	    
+    	    // Looks at width of columns, headers then data.
+            for (int i = 0; i < width; i++) {
+                if (queryHeaders[i].length() > widthArr[i])
+                    widthArr[i] = queryHeaders[i].length();
+            }
+    	    for (int i = 0; i < queryResults.length ; i++) {
+    	        for (int j = 0; j < width; j++) {
+    	            if (queryResults[i][j].length() > widthArr[j])
+    	                widthArr[j] = queryResults[i][j].length();
+                }
+    	    }
+
+    	    // calculates total width
+    	    for (int attWidth : widthArr)
+    	        totalWidth += attWidth + 3;
+
+    	    //Printing starts here.
+            for (int i = 0; i < totalWidth; i++)
+                System.out.print("-");                          // dashed line
+            System.out.println();
+            for (int i = 0; i < width; i++) {
+                System.out.printf("| %-" + widthArr[i] + "s ", 
+                                            queryHeaders[i]);   // headers
+            }
+            System.out.println();
+            for (int i = 0; i < totalWidth; i++)
+                System.out.print("-");                          // dashed line
+            System.out.println();
+            for (int i = 0; i < queryResults.length; i++) {
+                for (int j = 0; j < width; j++) {
+                    System.out.printf("| %-" + widthArr[j] + "s ", 
+                                    queryResults[i][j].trim());    // data
+                }
+                System.out.print("\n");
+            }
+            for (int i = 0; i < totalWidth; i++)
+                System.out.print("-");                          // dashed line
+            
+            System.out.println();
     	}
-    	else {
-    		System.out.println("Error running query.");
-    	}
-    	
     }
     
     private static void printUpdateResult(boolean updated, int numRows) {

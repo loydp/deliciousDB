@@ -57,7 +57,9 @@ public class QueryRunner {
         */
         m_queryArray.add(new QueryData(
         		"Show all ingredients in database", 
-        		"Select * from ingredient", 
+        		"Select ingredient_id as 'Ingredient'," + 
+        		" ingredient_name as 'Ingredient Name'," + 
+        		" ingredient_category as 'Category' from ingredient", 
         		null, 
         		null, 
         		false, 
@@ -66,8 +68,8 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show ingredient inventory for specified dish at specified location", 
-        		"SELECT location_name, menu_item_name, ingredient_name, \r\n" + 
-        		"	RHI.ingredient_quant AS 'Quantity Needed', \r\n" + 
+        		"SELECT location_name as 'Location Name', menu_item_name as 'Menu Item', ingredient_name as 'Ingredient', " + 
+        		"	RHI.ingredient_quant AS 'Quantity Needed', " + 
         		"	RHI.ingredient_quant_unit AS 'Needed Units', \r\n" + 
         		"	sum(INV.ingredient_quant) AS 'Quantity Available', \r\n" + 
         		"	INV.ingredient_quant_unit AS 'Available Units'\r\n" + 
@@ -96,7 +98,7 @@ public class QueryRunner {
        
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions for the menu items in menu plan 1", 
-        		"SELECT DISTINCT menu_item_name, dietary_restr_name\r\n" + 
+        		"SELECT DISTINCT menu_item_name as 'Menu Item', dietary_restr_name as 'Dietary Restriction' " + 
         		"FROM menu_plan_composition AS MPC\r\n" + 
         		"	JOIN menu_item as MI\r\n" + 
         		"	ON MPC.menu_item_ID = MI.menu_item_ID\r\n" + 
@@ -122,8 +124,8 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show all seasonal vendor products within specified time range", 
-        		"SELECT	ingredient.ingredient_name, vendor_product.product_id,\r\n" + 
-        		"	vendor_product.product_season_start, vendor_product.product_season_end\r\n" + 
+        		"SELECT	ingredient.ingredient_name as 'Ingredient', vendor_product.product_id as 'Product ID', " + 
+        		"	vendor_product.product_season_start as 'Season Start', vendor_product.product_season_end as 'Season End' " + 
         		"FROM		vendor_product natural join ingredient\r\n" + 
         		"WHERE	vendor_product.product_limited_avail = 1\r\n" + 
         		"AND		vendor_product.product_season_start > ?\r\n" + 
@@ -134,23 +136,20 @@ public class QueryRunner {
         		false, true,
                 new String[] {"2019-09-01", "2023-04-05"}));
         
+        // TODO messed up formatting
         m_queryArray.add(new QueryData(
         		"Show the minimum total amount of miles products need to travel to make a menu item",
-        		"Select recipe.recipe_id, recipe.recipe_name,\r\n" + 
-        		"sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) as 'Total minimum distance ingredients traveled'\r\n" + 
-        		"\r\n" + 
-        		"From\r\n" + 
-        		"menu_plan_composition natural join menu_item natural join menu_item_has_recipe natural join recipe natural join recipe_has_ingr\r\n" + 
-        		"natural join ingredient natural join vendor_product natural join vendor\r\n" + 
-        		"\r\n" + 
-        		"where (vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) <=\r\n" + 
-        		"(select min(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles)\r\n" + 
-        		"    From vendor_product natural join vendor\r\n" + 
-        		"	where vendor_product.ingredient_id = ingredient.ingredient_id)\r\n" + 
-        		"\r\n" + 
-        		"group by menu_item_has_recipe.recipe_id\r\n" + 
-        		"order by sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) asc;\r\n" + 
-        		"",
+        		"Select recipe.recipe_id as 'Recipe ID', recipe.recipe_name as 'Recipe Name', " + 
+        		"sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) as 'Total Min distance traveled' " + 
+        		"From " + 
+        		"menu_plan_composition natural join menu_item natural join menu_item_has_recipe natural join recipe natural join recipe_has_ingr " + 
+        		"natural join ingredient natural join vendor_product natural join vendor " + 
+        		"where (vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) <= " + 
+        		"(select min(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) " + 
+        		"    From vendor_product natural join vendor " + 
+        		"	where vendor_product.ingredient_id = ingredient.ingredient_id) " +
+        		"group by menu_item_has_recipe.recipe_id " + 
+        		"order by sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) asc",
         		null, 
         		null, 
         		false, 
@@ -159,7 +158,7 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show top selling dishes in the last month for all locations", 
-        		"SELECT menu_item.menu_item_name, sum(item_quantity) as 'Total Dishes Sold'\r\n" + 
+        		"SELECT menu_item.menu_item_name as 'Menu Item', sum(item_quantity) as 'Total Dishes Sold'\r\n" + 
         		"FROM customer_check\r\n" + 
         		"	JOIN check_item\r\n" + 
         		"	ON check_item.check_number = customer_check.check_number\r\n" + 
@@ -177,7 +176,7 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions in database", 
-        		"SELECT	* from dietary_restriction \n" +
+        		"SELECT	dietary_restr_ID as 'Restr. ID', dietary_restr_name as 'Dietary Restriction Name' from dietary_restriction \n" +
         		"ORDER BY dietary_restr_ID;",
         		null,
         		null, 
@@ -301,6 +300,9 @@ public class QueryRunner {
         boolean bOK = true;
         QueryData e=m_queryArray.get(queryChoice);        
         bOK = m_jdbcData.ExecuteQuery(e.GetQueryString(), parms, e.GetAllLikeParams());
+        if (!bOK) {
+        	m_error = m_jdbcData.GetError(); 
+        }
         return bOK;
     }
     
@@ -310,6 +312,9 @@ public class QueryRunner {
         QueryData e=m_queryArray.get(queryChoice);        
         bOK = m_jdbcData.ExecuteUpdate(e.GetQueryString(), parms);
         m_updateAmount = m_jdbcData.GetUpdateCount();
+        if (!bOK) {
+        	m_error = m_jdbcData.GetError();  
+        }
         return bOK;
     }   
     
