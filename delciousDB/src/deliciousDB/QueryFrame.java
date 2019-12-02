@@ -19,6 +19,7 @@ import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Cursor;
+import java.awt.Font;
 
 public class QueryFrame extends javax.swing.JFrame {
 
@@ -29,21 +30,19 @@ public class QueryFrame extends javax.swing.JFrame {
  * @param queryrunnerObj 
  */
     public QueryFrame(QueryRunner queryrunnerObj) {
-	dbPicture.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	dbPicture.setToolTipText("Delicious Business Family Photo");
-	dbPicture.setIcon(new ImageIcon(QueryFrame.class.getResource("/deliciousDB/DeliciousBusinessSmall.png")));
-	
-	
-	Image dbImage = new ImageIcon(this.getClass().getResource("/deliciousDB/DeliciousBusinessSmall.png")).getImage();
-    dbPicture.setIcon(new ImageIcon(dbImage));
-    dbPicture.setBounds(1100, 40, 110, 140);
-    getContentPane().add(dbPicture);
-	
-	
-	setTitle("Delicious Business");
-	setPreferredSize(new Dimension(1250, 990));
-	setIconImage(Toolkit.getDefaultToolkit().getImage(QueryFrame.class.getResource("/deliciousDB/farmer.ico")));
-	getContentPane().setBackground(new Color(240, 230, 140));
+		dbPicture.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		dbPicture.setToolTipText("Delicious Business Family Photo");
+		dbPicture.setIcon(new ImageIcon(QueryFrame.class.getResource("/deliciousDB/DeliciousBusinessSmall.png")));
+		
+		Image dbImage = new ImageIcon(this.getClass().getResource("/deliciousDB/DeliciousBusinessSmall.png")).getImage();
+	    dbPicture.setIcon(new ImageIcon(dbImage));
+	    dbPicture.setBounds(1100, 40, 110, 140);
+	    getContentPane().add(dbPicture);
+		
+		setTitle("Delicious Business");
+		setPreferredSize(new Dimension(1250, 990));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(QueryFrame.class.getResource("/deliciousDB/farmer.ico")));
+		getContentPane().setBackground(new Color(240, 230, 140));
 	
         initComponents();
         m_parmlabels = new JLabel[]{jLabel1, jLabel2, jLabel3, jLabel4, jLabel9, jLabel10, jLabel11, jLabel12};        
@@ -55,7 +54,7 @@ public class QueryFrame extends javax.swing.JFrame {
 
         for (int i=0; i < nAmt; i++)
         {
-            this.jComboBoxQuery.addItem("Query " + (i+1));
+        	this.jComboBoxQuery.addItem((i+1) + ". " + m_queryrunner.GetQueryName(i));
         }
         jComboBoxQuery.setEnabled(false);
         jBtnRunQuery.setEnabled(false);
@@ -123,6 +122,8 @@ public class QueryFrame extends javax.swing.JFrame {
         jPasswordField1.setToolTipText("Enter password (will be disguised with *)");
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jLabelQueryTitle = new javax.swing.JLabel();
+        jLabelQueryTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -204,15 +205,14 @@ public class QueryFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 980, 130));
 
         jPanel2.setLayout(new java.awt.BorderLayout());
-        //getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 980, 240));
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 1190, 580));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 1190, 530));
 
         jComboBoxQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBoxQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 220, -1));
+        getContentPane().add(jComboBoxQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 250, -1));
 
         jLabel5.setText("Database");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 90, 10));
@@ -253,6 +253,9 @@ public class QueryFrame extends javax.swing.JFrame {
         jLabel14.setText("VVV");
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 7, 300, -1));
 
+        jLabelQueryTitle.setFont(new java.awt.Font("Tahoma", 0, 18));
+        getContentPane().add(jLabelQueryTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 1190, 30));
+        
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -310,16 +313,19 @@ public class QueryFrame extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         
         jTextArea2.setText("");
+        jLabelQueryTitle.setText("");
+        
         String szChoice = (String)jComboBoxQuery.getSelectedItem();        
-        String szStripChoice = szChoice.substring(6);
+        String szStripChoice = szChoice.substring(0,1);
         m_queryChoice = Integer.parseInt(szStripChoice)-1;        
         String szQuery = m_queryrunner.GetQueryText(m_queryChoice);
         this.jTextArea1.setText(szQuery);
         System.out.println("choice is " + szChoice);
-        this.jPanel2.setVisible(false);        
-         
+        this.jPanel2.setVisible(false);  
+        
         if (this.m_queryrunner.isParameterQuery(m_queryChoice))
         {           
+        	String[] defaultValues = m_queryrunner.GetQueryDefaults(m_queryChoice);
             this.jPanel1.setVisible(true);                        
             int nAmt = this.m_queryrunner.GetParameterAmtForQuery(m_queryChoice);
             for (int i=0; i< nAmt; i++)
@@ -327,7 +333,10 @@ public class QueryFrame extends javax.swing.JFrame {
                 m_parmlabels[i].setVisible(true);
                 m_parmlabels[i].setText(m_queryrunner.GetParamText(m_queryChoice, i));
                 m_textvals[i].setVisible(true);
-                m_textvals[i].setText("");
+                if((defaultValues[i] != null) && (defaultValues[i] != ""))
+					m_textvals[i].setText(defaultValues[i]);
+                else
+                	m_textvals[i].setText("");
             }
             
             for (int i = nAmt; i < 8; i++)
@@ -356,9 +365,14 @@ public class QueryFrame extends javax.swing.JFrame {
  */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        jTextArea2.setText("");        
+        jTextArea2.setText("");    
+        
         if (this.m_queryrunner.isActionQuery(m_queryChoice) == false)
+        {
             jPanel2.setVisible(true);
+            jLabelQueryTitle.setVisible(true);
+            jLabelQueryTitle.setText(this.m_queryrunner.GetQueryName(m_queryChoice));
+        }
         
         int nAmt = this.m_queryrunner.GetParameterAmtForQuery(m_queryChoice);
         String [] parmstring={};
@@ -403,12 +417,9 @@ public class QueryFrame extends javax.swing.JFrame {
                 m_jTable = new JTable(allData, headers);
                 
                 m_jTable.setBounds(100, 100, 100, 80);
-                //Color ivory=new Color(255,255,208);
-                //Color newColor=new Color(190,240,140);
-                Color newColor=new Color(230,255,200);
+                Color lightYellow = new Color(230,255,200);
                 m_jTable.setOpaque(false);
-                //m_jTable.setBackground(ivory);
-                m_jTable.setBackground(newColor);     
+                m_jTable.setBackground(lightYellow);     
                 m_scrollPane = new JScrollPane(m_jTable);
                 jPanel2.add(m_scrollPane);// add table in panel using add() method                      
                 this.setVisible(true);                
@@ -441,6 +452,7 @@ public class QueryFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel jLabelQueryTitle;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -470,6 +482,10 @@ public class QueryFrame extends javax.swing.JFrame {
      * @wbp.nonvisual location=771,69
      */
     private final JLabel dbPicture = new JLabel("New label");
+    /**
+     * @wbp.nonvisual location=461,409
+     */
+
     
 
 }

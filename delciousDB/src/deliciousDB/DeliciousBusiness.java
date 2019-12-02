@@ -51,7 +51,7 @@ public class DeliciousBusiness {
                     }
                     System.out.print("\n\n>> ");
                     String input = keyboard.nextLine();
-                    processInput(keyboard, input);
+                    processInput(input);
                 }
                 
                 // SHUTDOWN         
@@ -113,19 +113,34 @@ public class DeliciousBusiness {
     }
     
     
-    private static void runQuery(int i) {
+    /**
+     * RunQuery runs a single query, including asking for input if that is
+     * necessary. If it's being run as part of an iteration in autoRunQuery,
+     * it will auto-fill necessary parameters with default values.
+     * @param i The index of a query to be run
+     * @param autoRun Boolean indicating if this function is being called by
+     * autoRunQuery.
+     */
+    private static void runQuery(int i, boolean autoRun) {
         boolean actionStatus;
     	// Get parameters for query
     	int numParams = QUERYRUNNER.GetParameterAmtForQuery(i);
+    	
     	String[] params = new String[numParams];
     	
     	// If there are params, get user input for them
     	if (numParams > 0) 
-    		System.out.println("Please input query parameters");
+    		System.out.println("Please input query parameters, or " +
+    		        "press ENTER to auto-fill\n");
     	
-    	for (int j = 0; j < numParams; j++) 
-    		params[j] = getParamFromUser(i, j);
-    
+    	// For num params times
+    	for (int j = 0; j < numParams; j++) {
+    		if (autoRun == false)
+    		    params[j] = getParamFromUser(i, j);
+    		else
+                params[j] = autoFillParam(i, j);
+    	}
+    	
     	// Determine proper action for query type
     	if (QUERYRUNNER.isActionQuery(i)) {
     		actionStatus = QUERYRUNNER.ExecuteUpdate(i, params);
@@ -141,6 +156,56 @@ public class DeliciousBusiness {
             // Prints table header and field data.
             printView(actionStatus, queryHeaders, queryResults);
     	}
+    	
+    	if (autoRun == true || i < QUERYRUNNER.GetTotalQueries() - 2) {
+            System.out.println(">> (press ENTER to continue)");
+            keyboard.nextLine();
+    	}
+    	
+    }
+    
+    
+    //TODO reinstate "add dietary restriction" by removing the - 1 in the initial for loop
+    /**
+     * Runs through each query, using default values to fill in parameters.
+     */
+    public static void runAllQueries() {
+        int numQueries = QUERYRUNNER.GetTotalQueries();
+        for (int i = 0; i < numQueries - 1; i++) {
+            runQuery(i, true);
+        }
+    }
+    
+    /**
+     * Prompts and passes on a necessary parameter from the user.
+     * @param queryNum
+     * @param paramNum
+     * @return
+     */
+    private static String getParamFromUser(int queryNum, int paramNum) {
+        String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
+        System.out.print(paramName + ": ");
+        String ret = keyboard.nextLine();
+        if (ret.isEmpty()) {
+            ret = QUERYRUNNER.GetParamDefault(queryNum, paramNum);
+            System.out.print(ret + "\n");
+        }
+        return ret;
+    }
+    
+    /**
+     * Autofills necessary parameters. Used as part of the runAllQueries
+     * function.
+     * @param queryNum
+     * @param paramNum
+     * @return string ret
+     */
+    private static String autoFillParam(int queryNum, int paramNum) {
+        String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
+        System.out.print(paramName + ": ");
+        String ret = QUERYRUNNER.GetParamDefault(queryNum, paramNum);
+        System.out.println(ret + "\n");
+        return ret;
     }
     
     
@@ -154,41 +219,50 @@ public class DeliciousBusiness {
                                   String[][] queryResults) {
         
     	if (executed) {
-	    	int attributeCount = 0;
-	        
-	        for (int i = 0; i < attributeCount * 22; i++)
-	            System.out.print("-");                      // dashed line
-	        
-	        System.out.println();
-	        
-	        for (String attribute : queryHeaders) {
-	            System.out.printf("| %-20s", attribute);    // header
-	            attributeCount++;
-	        }
-	            
-	        System.out.println();
-	        
-	        for (int i = 0; i < attributeCount * 22; i++)
-	            System.out.print("-");                      // dashed line
-	
-	        System.out.println();
-	        
-	        for (String[] row : queryResults) {
-	            for (String field : row) {
-	                System.out.printf("| %-20s", field);    // data
-	            }
-	            System.out.print("\n");
-	        }
-	        
-	        for (int i = 0; i < attributeCount * 22; i++)
-	            System.out.print("-");                      // dashed line
-	        
-	        System.out.println();
+    	    int width = queryHeaders.length;
+    	    int totalWidth = 0;
+    	    int[] widthArr = new int[width];
+    	    
+    	    // Looks at width of columns, headers then data.
+            for (int i = 0; i < width; i++) {
+                if (queryHeaders[i].length() > widthArr[i])
+                    widthArr[i] = queryHeaders[i].length();
+            }
+    	    for (int i = 0; i < queryResults.length ; i++) {
+    	        for (int j = 0; j < width; j++) {
+    	            if (queryResults[i][j].length() > widthArr[j])
+    	                widthArr[j] = queryResults[i][j].length();
+                }
+    	    }
+
+    	    // calculates total width
+    	    for (int attWidth : widthArr)
+    	        totalWidth += attWidth + 3;
+
+    	    //Printing starts here.
+            for (int i = 0; i < totalWidth; i++)
+                System.out.print("-");                          // dashed line
+            System.out.println();
+            for (int i = 0; i < width; i++) {
+                System.out.printf("| %-" + widthArr[i] + "s ", 
+                                            queryHeaders[i]);   // headers
+            }
+            System.out.println();
+            for (int i = 0; i < totalWidth; i++)
+                System.out.print("-");                          // dashed line
+            System.out.println();
+            for (int i = 0; i < queryResults.length; i++) {
+                for (int j = 0; j < width; j++) {
+                    System.out.printf("| %-" + widthArr[j] + "s ", 
+                                    queryResults[i][j].trim());    // data
+                }
+                System.out.print("\n");
+            }
+            for (int i = 0; i < totalWidth; i++)
+                System.out.print("-");                          // dashed line
+            
+            System.out.println();
     	}
-    	else {
-    		System.out.println("Error running query.");
-    	}
-    	
     }
     
     private static void printUpdateResult(boolean updated, int numRows) {
@@ -200,7 +274,7 @@ public class DeliciousBusiness {
     	}
     }
     
-    private static void processInput(Scanner keyboard, String input) {
+    private static void processInput(String input) {
     	if (inMainMenu) {
 	    	switch (input) {
 	        	// Help menu
@@ -211,7 +285,7 @@ public class DeliciousBusiness {
 	            	inMainMenu = false;
 	                break;
 	            case "2" :
-	                // TODO
+	                runAllQueries();
 	                break;
 	            case "x" :
 	            case "X" :
@@ -222,7 +296,7 @@ public class DeliciousBusiness {
 	                usingProgram = false;
 	                break;
 	            default :
-	                System.out.println("Input not recognized, try again.");
+	                System.out.println("\nInput not recognized, try again:");
 	    	}        
     	}
     	else {
@@ -230,10 +304,10 @@ public class DeliciousBusiness {
     		try {
     			int i = Integer.parseInt(input);
     			if (i >= 0 && i < queryNames.length) {
-    				runQuery(i);
+    				runQuery(i, false);
     			}
     			else {
-    				System.out.println("Invalid query number, try again.");
+    				System.out.println("Invalid query number, try again:");
     			}
     		}
     		catch (NumberFormatException nfe) {
@@ -241,12 +315,11 @@ public class DeliciousBusiness {
         			inMainMenu = true;
         		}
     			else {
-    				System.out.println("Input not recognized, try again.");
+    				System.out.println("Input not recognized, try again:");
     			}
     		}
     	}
-    
-    }    
+    }
 
     private static void helpMenu(Scanner keyboard) {
         System.out.println(HELP_MSG);
@@ -262,12 +335,6 @@ public class DeliciousBusiness {
     		System.out.println();
     	}
     	System.out.println("X. Back to main menu");
-    }
-    
-    private static String getParamFromUser(int queryNum, int paramNum) {
-    	String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
-    	System.out.print(paramName + ": ");
-    	return keyboard.nextLine();
     }
     
     private static final QueryRunner QUERYRUNNER = new QueryRunner();
@@ -317,9 +384,6 @@ public class DeliciousBusiness {
     private static final String DEFAULT_DB = "delicious_business";
 
 }
-
-
-
 
 
 
@@ -382,9 +446,6 @@ public class DeliciousBusiness {
 // ExecuteQuery must take an array of parameters and will get
 // the length of that array in QueryJDBC.ExecuteQuery
 // If there are no params, create an array size 0 and pass in
-
-
-
 
 
 //String[] noParams = new String[0];
