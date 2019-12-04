@@ -172,6 +172,18 @@ public class QueryJDBC {
             m_updateAmount =preparedStatement.executeUpdate();  
             preparedStatement.close();          
         }
+        
+        catch (SQLIntegrityConstraintViolationException ex)
+        {
+        	bOK = false;
+        	String errorMessage = "Sorry, " + parms[1] +
+        			" cannot be added with the ID " + parms[0]
+        			+ " because\nthat dietary restriction ID is already "
+        			+ "taken\n";
+            this.m_error = errorMessage;
+        	System.out.println(errorMessage);
+        	return false;
+        }
 
         catch (SQLException ex) 
         {
