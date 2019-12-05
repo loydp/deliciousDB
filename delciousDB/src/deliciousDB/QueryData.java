@@ -33,7 +33,7 @@ public class QueryData {
         m_arrayLikeParms = likeparms;
         m_isAction = isAction;
         m_isParms = isParm;
-        m_defaults = defaults;
+        this.defaults = defaults;
     }
     
     /**
@@ -81,7 +81,7 @@ public class QueryData {
      * @return default parameter value
      */
     String GetQueryDefault(int index) {
-        return m_defaults[index];
+        return defaults[index];
     }
     
     /**
@@ -127,10 +127,10 @@ public class QueryData {
      * @return
      */
     String[] getQueryDefaults() {
-        return m_defaults;
+        return defaults;
     }
     
-    private String[] m_defaults;
+    private String[] defaults;
     private String queryName;
     private String m_queryString;
     private String [] m_arrayParms;
