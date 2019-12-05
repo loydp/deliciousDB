@@ -197,7 +197,7 @@ public class QueryJDBC {
         	bOK = false;
         	String errorMessage = "Sorry, " + parms[1] +
         			" cannot be added with the ID " + parms[0]
-        			+ " because\nthat dietary restriction ID is already "
+        			+ " because\nthat name is already "
         			+ "taken\n";
             this.m_error = errorMessage;
         	System.out.println(errorMessage);
