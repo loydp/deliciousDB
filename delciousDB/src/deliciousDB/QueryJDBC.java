@@ -75,9 +75,7 @@ public class QueryJDBC {
     
 
     
-    // We think we can always setString on Parameters. Not sure
-    // if this is true.
-    // GetString on Results is fine though
+    
     /**
      * Executes a query 
      * @param szQuery	the SQL query to execute
@@ -110,7 +108,6 @@ public class QueryJDBC {
 
             }
 
-            //preparedStatement.setString(1,  "%" + szContact + "%");
             resultSet=preparedStatement.executeQuery();
 
             ResultSetMetaData rsmd = resultSet.getMetaData(); 
@@ -121,7 +118,6 @@ public class QueryJDBC {
             {
                 m_headers[i] = rsmd.getColumnLabel(i+1);
             }
-            //   
             int amtRow = 0;
             while(resultSet.next()){
                 amtRow++;
@@ -243,9 +239,6 @@ public class QueryJDBC {
         url += host;
         url +=":3306/";
         url += database;
-        // NOTE: PL changed this to correct a useSSL warning.
-        // Next line was added, Question mark removed from line after that to
-        // allow concatenation.
         url +="?autoReconnect=true&useSSL=false&";
         url +="useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         try 
