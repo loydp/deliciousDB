@@ -127,7 +127,7 @@ public class QueryRunner {
         		null));
         
         m_queryArray.add(new QueryData(
-        		"Show all seasonal vendor products like cheese within specified time range", 
+        		"Show all seasonal vendor products like something within specified time range", 
         		"SELECT ingredient.ingredient_name as 'Ingredient', \n      vendor_product.product_id as 'Product ID',\n      " + 
         		"vendor_product.product_season_start as 'Season Start', \n      " +
         		"vendor_product.product_season_end as 'Season End'\n" +
@@ -135,12 +135,12 @@ public class QueryRunner {
         		"WHERE vendor_product.product_limited_avail = 1\n      " + 
         		"AND vendor_product.product_season_start > ?\n      " + 
         		"AND vendor_product.product_season_end < ?\n" +
-        		"AND ingredient.ingredient_name like '%cheese'\n" + 
+        		"AND ingredient.ingredient_name like ?\n" + 
         		"ORDER BY vendor_product.product_season_start;",
-        		new String [] {"Start date (yyyy-mm-dd)", "End date (yyy-mm-dd)"}, 
-        		new boolean [] {false, false}, 
+        		new String [] {"Start date (yyyy-mm-dd)", "End date (yyy-mm-dd)", "Like"}, 
+        		new boolean [] {false, false, true}, 
         		false, true,
-                new String[] {"2019-09-01", "2023-04-05"}));
+                new String[] {"2019-09-01", "2023-04-05", "%Cheese%"}));
         
         m_queryArray.add(new QueryData(
         		"Show the minimum total amount of miles products need to travel to make a menu item",
