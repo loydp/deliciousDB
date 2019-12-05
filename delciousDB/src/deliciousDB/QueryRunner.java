@@ -10,9 +10,6 @@ package deliciousDB;
 
 
 import java.util.ArrayList;
-//import java.util.Scanner;
-
-// TODO I think the Scanner here is for the console version.
 
 /**
  * QueryRunner takes a list of Queries that are initialized in its constructor
@@ -52,11 +49,13 @@ public class QueryRunner {
         //    IsItParameterQuery (e.g.Mark it true if it is, otherwise false)
         
         /* Argument format: 
+         * queryName The name of the query, to be presented in menus.
          * String query (the entire query)
          * String[] parms  (null if no params OR list of parameter names)
          * boolean [] likeparms (if parameter has "LIKE" clause; null if no params OR true/false for each param in array
          * boolean isAction (Action query = insert, update, delete)
          * boolean isParm (True if query takes params, false if not)
+         * string[] defaults A string of defaults to be placed into params, in parallel.
         */
         m_queryArray.add(new QueryData(
         		"Show all ingredients transported by horse", 
@@ -141,7 +140,6 @@ public class QueryRunner {
         		false, true,
                 new String[] {"2019-09-01", "2023-04-05"}));
         
-        // TODO messed up formatting
         m_queryArray.add(new QueryData(
         		"Show the minimum total amount of miles products need to travel to make a menu item",
         		"Select recipe.recipe_id as 'Recipe ID', recipe.recipe_name as 'Recipe Name', " + 
@@ -201,22 +199,38 @@ public class QueryRunner {
     }
        
 
+    /**
+     * Returns the number of queries, used in menus.
+     * @return int Representing the number of queries.
+     */
     public int GetTotalQueries()
     {
         return m_queryArray.size();
     }
     
+    /**
+     * Investigates a query to find how many parameters it has.
+     * @param queryChoice The query being investigated
+     * @return int the number of parameters in this query.
+     */
     public int GetParameterAmtForQuery(int queryChoice)
     {
         QueryData e=m_queryArray.get(queryChoice);
         return e.GetParmAmount();
     }
               
+    /**
+     * Returns the name of a parameter at a given location.
+     * @param queryChoice 
+     * @param parmnum
+     * @return
+     */
     public String GetParamText(int queryChoice, int parmnum )
     {
        QueryData e=m_queryArray.get(queryChoice);        
        return e.GetParamText(parmnum); 
     }   
+    
     
     public String GetParamDefault(int queryChoice, int parmnum )
     {
@@ -346,10 +360,11 @@ public class QueryRunner {
         return m_error;
     }
  
-    private QueryJDBC m_jdbcData;
-    private String m_error;    
-    private String m_projectTeamApplication;
-    private ArrayList<QueryData> m_queryArray;  
-    private int m_updateAmount;
+    private QueryJDBC m_jdbcData;               // A JDBC instance
+    private String m_error;                     // Error messages
+    private String m_projectTeamApplication;    // The name of the project
+    private ArrayList<QueryData> m_queryArray;  // The queries.
+    private int m_updateAmount;                 // Displays the number of
+                                                // rows effected by an update
       
 }
