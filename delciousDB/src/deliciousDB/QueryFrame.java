@@ -88,6 +88,8 @@ public class QueryFrame extends javax.swing.JFrame {
         jTextFieldUser.setToolTipText("Enter username");
         jTextFieldUser.setText("admin");
         jPanel1 = new javax.swing.JPanel();
+        jPanel1.setBackground(new Color(248,240,155));
+        
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jTextField7 = new javax.swing.JTextField();
@@ -419,9 +421,9 @@ public class QueryFrame extends javax.swing.JFrame {
                 m_jTable = new JTable(allData, headers);
                 
                 m_jTable.setBounds(100, 100, 100, 80);
-                Color lightYellow = new Color(230,255,200);
+                Color lightGreen = new Color(230,255,200);
                 m_jTable.setOpaque(false);
-                m_jTable.setBackground(lightYellow);     
+                m_jTable.setBackground(lightGreen);     
                 m_scrollPane = new JScrollPane(m_jTable);
                 jPanel2.add(m_scrollPane);// add table in panel using add() method                      
                 this.setVisible(true);
