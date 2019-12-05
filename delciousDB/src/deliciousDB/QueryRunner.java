@@ -59,10 +59,12 @@ public class QueryRunner {
          * boolean isParm (True if query takes params, false if not)
         */
         m_queryArray.add(new QueryData(
-        		"Show all ingredients in database", 
-        		"Select ingredient_id as 'Ingredient'," + 
-        		" ingredient_name as 'Ingredient Name'," + 
-        		" ingredient_category as 'Category' from ingredient", 
+        		"Show all ingredients transported by horse", 
+        		"Select ingredient.ingredient_id AS 'Ingredient', ingredient_name as 'Ingredient Name',\r\n" + 
+        		"        ingredient_category as 'Category', product_transport_method as 'Transport Method'\r\n" + 
+        		"from ingredient join vendor_product using (ingredient_id)\r\n" + 
+        		"where product_transport_method = 'horseback'\r\n" + 
+        		"order by category, ingredient;", 
         		null, 
         		null, 
         		false, 
