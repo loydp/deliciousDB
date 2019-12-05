@@ -2,28 +2,28 @@ package deliciousDB;
 
 import java.util.Scanner;
 
+/**
+ * Driver class for running both GUI and console portions of QueryRunner application
+ * @author Alisa Wallace, Doug Herstad, Peter Loyd
+ * @version 1.0
+ */
 public class DeliciousBusiness {
 
     /**
-     * 
+     * Main method.  Runs GUI setup unless "-console" provided as command line argument at runtime
      * @param args A string array containing the command line arguments.
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        
-        if (args.length == 0)
-        {
+       
+        if (args.length == 0) {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-
                     new QueryFrame(QUERYRUNNER).setVisible(true);
                 }            
             });
         }
-        else
-        {
-            if (args[0].equals ("-console"))
-            {
+        else {
+            if (args[0].equals ("-console")) {
                 // CONNECTION
                 boolean connected = false;
                 do {
@@ -42,7 +42,6 @@ public class DeliciousBusiness {
                 // ENTER MAIN MENU LOOP
                 System.out.println(WELCOME_MSG);
                 inMainMenu = true;
-                
                 while (usingProgram) {
                     if (inMainMenu)
                     	System.out.print(MAIN_MENU);
@@ -169,7 +168,7 @@ public class DeliciousBusiness {
     /**
      * Runs through each query, using default values to fill in parameters.
      */
-    public static void runAllQueries() {
+    private static void runAllQueries() {
         int numQueries = QUERYRUNNER.GetTotalQueries();
         for (int i = 0; i < numQueries - 1; i++) {
             runQuery(i, true);
