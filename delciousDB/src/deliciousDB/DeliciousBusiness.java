@@ -78,7 +78,7 @@ public class DeliciousBusiness {
     	String typeLC = type.toLowerCase();
     	switch (typeLC) {
     		case "default":
-    			connected = QUERYRUNNER.Connect(Defaults.HOSTNAME, DEFAULT_USER, 
+    			connected = QUERYRUNNER.Connect(DEFAULT_HOST, DEFAULT_USER, 
     					DEFAULT_PASSWORD, DEFAULT_DB);
     			printConnectionStatus(connected, DEFAULT_DB);
     			return connected;
@@ -164,13 +164,12 @@ public class DeliciousBusiness {
     }
     
     
-    //TODO reinstate "add dietary restriction" by removing the - 1 in the initial for loop
     /**
      * Runs through each query, using default values to fill in parameters.
      */
     private static void runAllQueries() {
         int numQueries = QUERYRUNNER.GetTotalQueries();
-        for (int i = 0; i < numQueries - 1; i++) {
+        for (int i = 0; i < numQueries; i++) {
             runQuery(i, true);
         }
     }
@@ -210,8 +209,7 @@ public class DeliciousBusiness {
     
     /**
      * Displays the results of queries, first using attribute names and
-     * then using table fields. Gives each field 22 chars.
-     * This may be expanded later.
+     * then using table fields. Dynamically adjusts column width based on contents.
      * @param queryResults
      */
     private static void printView(boolean executed, String[] queryHeaders, 
@@ -264,6 +262,11 @@ public class DeliciousBusiness {
     	}
     }
     
+    /**
+     * Displays the outcome of an action query.
+     * @param updated	outcome of action (successful or not)
+     * @param numRows	number of rows the action impacted
+     */
     private static void printUpdateResult(boolean updated, int numRows) {
     	if (updated) {
     		System.out.println("\n" + numRows + " row(s) successfully updated.\n");
@@ -273,12 +276,15 @@ public class DeliciousBusiness {
     	}
     }
     
+    /**
+     * Processes user input from command line prompt 
+     * @param input		user input
+     */
     private static void processInput(String input) {
     	if (inMainMenu) {
 	    	switch (input) {
-	        	// Help menu
                 case "0" :
-                    helpMenu(keyboard);
+                    aboutMessage();
                     break;
 	            case "1" :
 	            	inMainMenu = false;
@@ -320,11 +326,19 @@ public class DeliciousBusiness {
     	}
     }
 
-    private static void helpMenu(Scanner keyboard) {
-        System.out.println(HELP_MSG);
+    /**
+     * Displays "about" information to user and returns to main menu when
+     * user hits "enter"
+     */
+    private static void aboutMessage() {
+        System.out.println(ABOUT_MSG);
         keyboard.nextLine();
     }
     
+    /**
+     * Displays all available queries by name and order they are stored in
+     * the QueryData object
+     */
     private static void printQueryOptions() {
     	System.out.println("\nAvailable queries (enter number to run): ");
     	for (int i = 0; i < queryNames.length; i++) {
@@ -336,35 +350,45 @@ public class DeliciousBusiness {
     	System.out.println("X. Back to main menu");
     }
     
+    // *** FIELDS ***
+    
+    // Query function
     private static final QueryRunner QUERYRUNNER = new QueryRunner();
     private static String[] queryNames = QUERYRUNNER.GetQueryNames();
+    
+    // Menu function
+    private static boolean usingProgram = true;
+    private static boolean inMainMenu;
+
+    private static Scanner keyboard = new Scanner(System.in);
+    
+    // Printing and output
     private static final String MAIN_MENU = 
     		"\nMain Menu (enter option number to execute): " +
-    		"\n0. Help menu" +
+    		"\n0. About" +
     		"\n1. Run single query (view options)" +
     		"\n2. Run all queries (" + QUERYRUNNER.GetTotalQueries() + 
     			" total)" +
     		"\nX. Exit program and disconnect";
 
-    private static final String HELP_MSG =
-            "\n\n=== HELP MENU ===\n\n" +
+    private static final String ABOUT_MSG =
+            "\n\n=== ABOUT ===\n\n" +
             "Delicious_DB is an application for eco and health conscious\n" +
-            "restaurant managers, who need access to the data stored in the\n" +
-            "Delicious Business Database. GUI and Console versions exist, and\n" +
-            "you're using the console\n" +
-            "version now.\n\n" +
+            "restaurant managers who use the Delicious Business Database. \n\n" +
+            "Developed by: Peter Loyd, Alisa Wallace, Doug Herstad\n" +
+            "Website: deliciousbusinessdb.com\n" +
+            "Version: 1.0\n\n" +
             
-            "Navigation is achieved via entering a character corresponding\n" + 
-            "to the appropriate option, and pressing enter.\n\n" +
+            "To use the menus, type the number/character corresponding to your\n" + 
+            "selection in the command prompt and press enter.\n\n" +
             
             "Exiting the program can be done by entering \"X\" in any\n" +
             "menu, and pressing enter.\n\n" +
-            
-            "Queries may need specific input in order to run.\n" +
-            
-            "When \"Run all queries\" is selected, specific values are\n" +
+            "Notes:\n" +
+            "- Queries may need specific input in order to run.\n" +
+            "- When \"Run all queries\" is selected, specific values are\n" +
             "chosen for you." +
-            "\n\n=== PRESS ENTER TO CONTINUE===\n" +
+            "\n\n=== PRESS ENTER TO CONTINUE ===\n" +
             "\n";
     
     private static final String WELCOME_MSG = "\n*** Welcome to the Delicious " +
@@ -372,10 +396,7 @@ public class DeliciousBusiness {
     private static final String GOODBYE_MSG = "\nThank you for using " +
                          "the Delicious Business Database!\n";
     
-    private static boolean usingProgram = true;
-    private static boolean inMainMenu;
-
-    private static Scanner keyboard = new Scanner(System.in);
+    // Database defaults
     private static final String DEFAULT_HOST = 
     		"deliciousbusiness.cespupxlvku2.us-east-1.rds.amazonaws.com";
     private static final String DEFAULT_USER = "admin";
@@ -383,78 +404,3 @@ public class DeliciousBusiness {
     private static final String DEFAULT_DB = "delicious_business";
 
 }
-
-
-
-// TODO 
-// You should code the following functionality:
-
-//    You need to determine if it is a parameter query. If it is, then
-//    you will need to ask the user to put in the values for the Parameters in your query
-//    you will then call ExecuteQuery or ExecuteUpdate (depending on whether it is an action query or regular query)
-//    if it is a regular query, you should then get the data by calling GetQueryData. You should then display this
-//    output. 
-//    If it is an action query, you will tell how many row's were affected by it.
-// 
-//    This is Psuedo Code for the task:  
-//    Connect()
-//    n = GetTotalQueries()
-//    for (i=0;i < n; i++)
-//    {
-//       Is it a query that Has Parameters
-//       Then
-//           amt = find out how many parameters it has
-//           Create a paramter array of strings for that amount
-//           for (j=0; j< amt; j++)
-//              Get The Paramater Label for Query and print it to console. Ask the user to enter a value
-//              Take the value you got and put it into your parameter array
-//           If it is an Action Query then
-//              call ExecuteUpdate to run the Query
-//              call GetUpdateAmount to find out how many rows were affected, and print that value
-//           else
-//               call ExecuteQuery 
-//               call GetQueryData to get the results back
-//               print out all the results
-//           end if
-//      }
-//    Disconnect()
-
-// NOTE - IF THERE ARE ANY ERRORS, please print the Error output
-// NOTE - The QueryRunner functions call the various JDBC Functions that are in QueryJDBC. If you would rather code JDBC
-// functions directly, you can choose to do that. It will be harder, but that is your option.
-// NOTE - You can look at the QueryRunner API calls that are in QueryFrame.java for assistance. You should not have to 
-//    alter any code in QueryJDBC, QueryData, or QueryFrame to make this work.
-
-// Need to make a QueryRunner object to use its methods
-//QueryRunner QUERYRUNNER = new QueryRunner();
-
-
-
-// Create some kind of help menu 
-// Show commands:
-// - Show queries (Number, name, params)
-// - Run single query (based on number)
-// - Run all queries (use loop to go through all)
-// - Disconnect 
-
-// When executing queries with parameters, could also store
-// "default" parameter values for easy testing/demos 
-// E.g., each query has its own array of param values, then we
-// just loop through the array to input all params for a given query
-
-// ExecuteQuery must take an array of parameters and will get
-// the length of that array in QueryJDBC.ExecuteQuery
-// If there are no params, create an array size 0 and pass in
-
-
-//String[] noParams = new String[0];
-//
-//// 0 refers to the query number (index) in the queryArray
-//QUERYRUNNER.ExecuteQuery(0, noParams);
-//
-//// Gathers table header and field data.
-//String[] queryHeaders = QUERYRUNNER.GetQueryHeaders();
-//String[][] queryResults = QUERYRUNNER.GetQueryData();
-//
-//// Prints table header and field data.
-//printView(queryHeaders, queryResults);
