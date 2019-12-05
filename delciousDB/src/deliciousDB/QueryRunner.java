@@ -127,14 +127,15 @@ public class QueryRunner {
         		null));
         
         m_queryArray.add(new QueryData(
-        		"Show all seasonal vendor products within specified time range", 
+        		"Show all seasonal vendor products like cheese within specified time range", 
         		"SELECT ingredient.ingredient_name as 'Ingredient', \n      vendor_product.product_id as 'Product ID',\n      " + 
         		"vendor_product.product_season_start as 'Season Start', \n      " +
         		"vendor_product.product_season_end as 'Season End'\n" +
         		"FROM vendor_product natural join ingredient\n" + 
         		"WHERE vendor_product.product_limited_avail = 1\n      " + 
         		"AND vendor_product.product_season_start > ?\n      " + 
-        		"AND vendor_product.product_season_end < ?\n" + 
+        		"AND vendor_product.product_season_end < ?\n" +
+        		"AND ingredient.ingredient_name like '%cheese'\n" + 
         		"ORDER BY vendor_product.product_season_start;",
         		new String [] {"Start date (yyyy-mm-dd)", "End date (yyy-mm-dd)"}, 
         		new boolean [] {false, false}, 
