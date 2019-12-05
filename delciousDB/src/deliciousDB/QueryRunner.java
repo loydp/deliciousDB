@@ -221,9 +221,9 @@ public class QueryRunner {
               
     /**
      * Returns the name of a parameter at a given location.
-     * @param queryChoice 
-     * @param parmnum
-     * @return
+     * @param queryChoice The index of the query.
+     * @param parmnum The index of the parameter.
+     * @return The name of a parameter
      */
     public String GetParamText(int queryChoice, int parmnum )
     {
@@ -231,31 +231,55 @@ public class QueryRunner {
        return e.GetParamText(parmnum); 
     }   
     
-    
+    /**
+     * Returns default values to be inserted into parameters.
+     * @param queryChoice The index of the query.
+     * @param parmnum The index of the parameter.
+     * @return default values to be inserted into parameters.
+     */
     public String GetParamDefault(int queryChoice, int parmnum )
     {
        QueryData e=m_queryArray.get(queryChoice);        
        return e.GetQueryDefault(parmnum);
     }
     
+    /**
+     * Returns the SQL query, as a string.
+     * @param queryChoice The index of the query.
+     * @return the SQL query, as a string.
+     */
     public String GetQueryText(int queryChoice)
     {
         QueryData e=m_queryArray.get(queryChoice);
         return e.GetQueryString();        
     }
     
+    /**
+     * Returns the default parameter as a string.
+     * @param queryChoice The index of the query.
+     * @return The default parameter as a string.
+     */
     public String[] GetQueryDefaults(int queryChoice)
     {
         QueryData e=m_queryArray.get(queryChoice);
         return e.getQueryDefaults();               
     }
     
+    /**
+     * Gets the name of the query
+     * @param queryChoice The index of the query.
+     * @return The name of the query
+     */
     public String GetQueryName(int queryChoice)
     {
     	QueryData e=m_queryArray.get(queryChoice);
     	return e.GetQueryName();
     }
     
+    /**
+     * Gets the names of the queries.
+     * @return An array of query names.
+     */
     public String[] GetQueryNames() {
     	String[] queryNames = new String[m_queryArray.size()];
     	for (int i = 0; i < m_queryArray.size(); i++) {
@@ -288,7 +312,7 @@ public class QueryRunner {
      * After the query has been run, all of the data has been captured into
      * a multi-dimensional string array which contains all the row's. For each
      * row it also has all the column data. It is in string format
-     * @return multi-dimensional array of String data based on the resultset 
+     * @return multi-dimensional array of String data based on the result set 
      * from the query
      */
     public String[][] GetQueryData()
@@ -296,23 +320,43 @@ public class QueryRunner {
         return m_jdbcData.GetData();
     }
 
+    /**
+     * Returns the name of the project.
+     * @return The name of the project.
+     */
     public String GetProjectTeamApplication()
     {
         return m_projectTeamApplication;        
     }
+    
+    /**
+     * Returns a boolean representing whether the query is an action query.
+     * @param queryChoice the index of the query in an array
+     * @return boolean representing if the query was an action query
+     */
     public boolean  isActionQuery (int queryChoice)
     {
         QueryData e=m_queryArray.get(queryChoice);
         return e.IsQueryAction();
     }
     
+    /**
+     * Returns a boolean representing if the query has parameters.
+     * @param queryChoice The index of the query in an array.
+     * @return boolean representing if the query has parameters.
+     */
     public boolean isParameterQuery(int queryChoice)
     {
         QueryData e=m_queryArray.get(queryChoice);
         return e.IsQueryParm();
     }
     
-     
+     /**
+      * Executes a query, reports if it worked.
+      * @param queryChoice the index of the query
+      * @param parms the parameters of the query
+      * @return boolean representing if it worked.
+      */
     public boolean ExecuteQuery(int queryChoice, String [] parms)
     {
         boolean bOK = true;
@@ -324,6 +368,12 @@ public class QueryRunner {
         return bOK;
     }
     
+    /**
+     * Executes a query that changes the DB
+     * @param queryChoice the index of the query
+     * @param parms the parameters of the query
+     * @return a boolean representing if the query updated properly.
+     */
      public boolean ExecuteUpdate(int queryChoice, String [] parms)
     {
         boolean bOK = true;
@@ -336,7 +386,14 @@ public class QueryRunner {
         return bOK;
     }   
     
-      
+    /**
+     * Passes connection information to jdbc.
+     * @param szHost 
+     * @param szUser
+     * @param szPass
+     * @param szDatabase
+     * @return Boolean indicating if the connection was made properly
+     */
     public boolean Connect(String szHost, String szUser, String szPass, String szDatabase)
     {
 
@@ -346,6 +403,10 @@ public class QueryRunner {
         return bConnect;
     }
     
+    /**
+     * Disconnects from the DB
+     * @return boolean indicating that disconnection happened properly.
+     */
     public boolean Disconnect()
     {
         // Disconnect the JDBCData Object
@@ -355,6 +416,10 @@ public class QueryRunner {
         return true;
     }
     
+    /**
+     * Passes an error message back to the function that called it.
+     * @return m_error An error message.
+     */
     public String GetError()
     {
         return m_error;
