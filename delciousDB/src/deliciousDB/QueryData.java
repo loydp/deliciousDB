@@ -123,17 +123,18 @@ public class QueryData {
     }
     
     /**
-     * Returns default query values
-     * @return
+     * Returns a string of default parameter values
+     * @return default parameter values
      */
     String[] getQueryDefaults() {
         return defaults;
     }
     
-    private String[] defaults;
-    private String queryName;
-    private String m_queryString;
-    private String [] m_arrayParms;
+
+    private String queryName;            // the name of the query
+    private String m_queryString;        // the query
+    private String [] m_arrayParms;      // parameters
+    private String[] defaults;           // defaults values for params
     private boolean m_isAction;
     private boolean m_isParms;   
     private boolean [] m_arrayLikeParms;
