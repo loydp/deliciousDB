@@ -15,7 +15,7 @@ import java.util.ArrayList;
 // TODO I think the Scanner here is for the console version.
 
 /**
- * QueryRunner takes a list of Queries that are initialized in it's constructor
+ * QueryRunner takes a list of Queries that are initialized in its constructor
  * and provides functions that will call the various functions in the QueryJDBC class 
  * which will enable MYSQL queries to be executed. It also has functions to provide the
  * returned data from the Queries. Currently the eventHandlers in QueryFrame call these
@@ -197,8 +197,7 @@ public class QueryRunner {
         		new boolean [] {false, false}, 
         		true, 
         		true,
-        		new String[] {"120", "Pork"}));    
-        
+        		new String[] {"120", "Pork"}));
     }
        
 

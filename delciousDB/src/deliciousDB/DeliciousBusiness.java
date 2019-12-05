@@ -184,8 +184,8 @@ public class DeliciousBusiness {
     
     /**
      * Prompts and passes on a necessary parameter from the user.
-     * @param queryNum
-     * @param paramNum
+     * @param queryNum The index number of the query.
+     * @param paramNum The index number of the parameter.
      * @return
      */
     private static String getParamFromUser(int queryNum, int paramNum) {
@@ -202,9 +202,10 @@ public class DeliciousBusiness {
     /**
      * Autofills necessary parameters. Used as part of the runAllQueries
      * function.
-     * @param queryNum
-     * @param paramNum
-     * @return string ret
+     * @param queryNum The index number of the query.
+     * @param paramNum The index number of the parameter.
+     * @return string ret A string representing the default value for the
+     * parameter in question.
      */
     private static String autoFillParam(int queryNum, int paramNum) {
         String paramName = QUERYRUNNER.GetParamText(queryNum, paramNum);
