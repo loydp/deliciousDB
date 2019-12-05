@@ -212,7 +212,7 @@ public class QueryFrame extends javax.swing.JFrame {
                 jComboBox1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBoxQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 250, -1));
+        getContentPane().add(jComboBoxQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 294, -1));
 
         jLabel5.setText("Database");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 90, 10));
@@ -240,7 +240,7 @@ public class QueryFrame extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jBtnRunQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(648, 190, -1, -1));
+        getContentPane().add(jBtnRunQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(692, 190, -1, -1));
 
         jPasswordField1.setText("cpsc5021password");
         jPasswordField1.setNextFocusableComponent(jTextFieldDatabase);
