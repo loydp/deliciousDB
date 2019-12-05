@@ -1,27 +1,26 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Alisa Wallace, Peter Loyd, Doug Herstad
+ * Seattle University
+ * CPSC 5021 Fall 2019
+ * Project Milestone 3
+ * Based on code provided by Michael McKee of Seattle University
  */
+
 package deliciousDB;
 import java.sql.Connection;
 import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Scanner;
-import java.util.ArrayList;
 
 /**
- *
+ * Manages connection between application and database
  * @author mckeem
  */
-
 
 public class QueryJDBC {
 
 
     public Connection m_conn = null; 
-    // XXX if something breaks, try removing cj from this string:
     static final String DB_DRV = "com.mysql.cj.jdbc.Driver";
     String m_error="";  
     String m_url;
@@ -29,28 +28,46 @@ public class QueryJDBC {
     String [] m_headers;
     String [][] m_allRows;
     int m_updateAmount = 0;
-       
+    
+    /**
+     * Constructor
+     */
     QueryJDBC ()
     {
         m_updateAmount = 0;
     }
     
+    /**
+     * Returns the error from the database (set by other functions)
+     * @return	the error that the database has
+     */
     public String GetError()
     {
         return m_error;
     }
 
-
+    /**
+     * Gets the headers for the output table of a query
+     * @return	a String array containing the table headers
+     */
     public String [] GetHeaders()
     {
         return this.m_headers;
     }
     
+    /**
+     * Gets the data for the output table of a query
+     * @return	a String double array with data
+     */
     public String [][] GetData()
     {
         return this.m_allRows;
     }
     
+    /**
+     * Returns how many rows of the database table were affected by action query
+     * @return
+     */
     public int GetUpdateCount()
     {
         return m_updateAmount;
@@ -61,7 +78,13 @@ public class QueryJDBC {
     // We think we can always setString on Parameters. Not sure
     // if this is true.
     // GetString on Results is fine though
-    
+    /**
+     * Executes a query 
+     * @param szQuery	the SQL query to execute
+     * @param parms		an array of the parameters for a specific query
+     * @param likeparms	whether each parameter is a LIKE parameter
+     * @return	true if executed successful, false if not
+     */
     public boolean ExecuteQuery(String szQuery, String [] parms, boolean [] likeparms)
     {
         PreparedStatement preparedStatement = null;        
@@ -204,7 +227,14 @@ public class QueryJDBC {
     }
    
     
-                 
+    /**
+     * Connects application to the database          
+     * @param host		hostname
+     * @param user		username
+     * @param pass		password
+     * @param database	name of database on server
+     * @return true if successful connection, false if not
+     */
     public boolean ConnectToDatabase(String host, String user, String pass, String database)
     {        
         String url;
@@ -243,16 +273,15 @@ public class QueryJDBC {
     }
     
 
-    /* Document this function
-    // TODO    
-    */
+    /**
+     * Disconnects from database.  Catches any errors with disconnection.
+     * @return	true if successful, false if errors
+     */
     public boolean CloseDatabase()
     {        
         try 
         {
-
             m_conn.close();
-           
         } 
         catch (SQLException ex) 
         {

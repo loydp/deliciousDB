@@ -1,26 +1,27 @@
+/*
+ * Alisa Wallace, Peter Loyd, Doug Herstad
+ * Seattle University
+ * CPSC 5021 Fall 2019
+ * Project Milestone 3
+ * Based on code provided by Michael McKee of Seattle University
+ */
+
 package deliciousDB;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 
-/**
- *
- * @author mckeem
- */
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.Color;
 import javax.swing.*;
 import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Cursor;
-import java.awt.Font;
 
+/**
+ * QueryFrame configures the GUI portion of the application.
+ * @author mckeem
+ * Enhanced by Doug Herstad, Peter Loyd, and Alisa Wallace
+ */
 public class QueryFrame extends javax.swing.JFrame {
 
 /**

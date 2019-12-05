@@ -1,42 +1,45 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Alisa Wallace, Peter Loyd, Doug Herstad
+ * Seattle University
+ * CPSC 5021 Fall 2019
+ * Project Milestone 3
+ * Based on code provided by Michael McKee of Seattle University
  */
+
 package deliciousDB;
 
-// Test
 
 import java.util.ArrayList;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 // TODO I think the Scanner here is for the console version.
 
 /**
- * 
  * QueryRunner takes a list of Queries that are initialized in it's constructor
  * and provides functions that will call the various functions in the QueryJDBC class 
  * which will enable MYSQL queries to be executed. It also has functions to provide the
  * returned data from the Queries. Currently the eventHandlers in QueryFrame call these
  * functions in order to run the Queries.
+ * 
+ * @author Michael McKee
+ * 
+ * Enhanced by Alisa Wallace, Peter Loyd, and Doug Herstad
  */
+
 public class QueryRunner {
 
-    
+    /**
+     * Constructor
+     * Initializes QueryRunner object with queries manually input
+     */
     public QueryRunner()
     {
         this.m_jdbcData = new QueryJDBC();
         m_updateAmount = 0;
         m_queryArray = new ArrayList<>();
         m_error="";
-    
         
-        // TODO - You will need to change the queries below to match your queries.
-        
-     
-        // You will need to put your Project Application in the below variable
-        
-        this.m_projectTeamApplication="Delicious Business";    // THIS NEEDS TO CHANGE FOR YOUR APPLICATION
+        this.m_projectTeamApplication="Delicious Business";
         
         // Each row that is added to m_queryArray is a separate query. It does not work on Stored procedure calls.
         // The 'new' Java keyword is a way of initializing the data that will be added to QueryArray. Please do not change

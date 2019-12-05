@@ -1,3 +1,11 @@
+/*
+ * Alisa Wallace, Peter Loyd, Doug Herstad
+ * Seattle University
+ * CPSC 5021 Fall 2019
+ * Project Milestone 3
+ * Based on code provided by Michael McKee of Seattle University
+ */
+
 package deliciousDB;
 
 import java.util.Scanner;

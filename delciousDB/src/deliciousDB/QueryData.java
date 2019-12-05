@@ -1,8 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Alisa Wallace, Peter Loyd, Doug Herstad
+ * Seattle University
+ * CPSC 5021 Fall 2019
+ * Project Milestone 3
+ * Based on code provided by Michael McKee of Seattle University
  */
+
 package deliciousDB;
 
 import java.util.ArrayList;
