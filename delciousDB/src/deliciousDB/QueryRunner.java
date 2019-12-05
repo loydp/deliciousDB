@@ -59,9 +59,9 @@ public class QueryRunner {
         */
         m_queryArray.add(new QueryData(
         		"Show all ingredients transported by horse", 
-        		"Select ingredient.ingredient_id AS 'Ingredient',\n    ingredient_name as 'Ingredient Name',\n   " + 
-        		"ingredient_category as 'Category',\n    product_transport_method as 'Transport Method'\n" + 
-        		"from ingredient join vendor_product\n    using (ingredient_id)\n" + 
+        		"Select ingredient.ingredient_id AS 'Ingredient',\n      ingredient_name as 'Ingredient Name',\n      " + 
+        		"ingredient_category as 'Category',\n      product_transport_method as 'Transport Method'\n" + 
+        		"from ingredient join vendor_product\n      using (ingredient_id)\n" + 
         		"where product_transport_method = 'horseback'\n" + 
         		"order by category, ingredient;", 
         		null, 
@@ -72,24 +72,24 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show ingredient inventory for specified dish at specified location", 
-        		"SELECT location_name as 'Location Name', \n   menu_item_name as 'Menu Item', \n   ingredient_name as 'Ingredient', " + 
-        		"\n   RHI.ingredient_quant AS 'Quantity Needed', " + 
-        		"\n   RHI.ingredient_quant_unit AS 'Needed Units'," + 
-        		"\n   sum(INV.ingredient_quant) AS 'Quantity Available'," + 
-        		"\n   INV.ingredient_quant_unit AS 'Available Units'" + 
+        		"SELECT location_name as 'Location Name', \n      menu_item_name as 'Menu Item', \n      ingredient_name as 'Ingredient', " + 
+        		"\n      RHI.ingredient_quant AS 'Quantity Needed', " + 
+        		"\n      RHI.ingredient_quant_unit AS 'Needed Units'," + 
+        		"\n      sum(INV.ingredient_quant) AS 'Quantity Available'," + 
+        		"\n      INV.ingredient_quant_unit AS 'Available Units'" + 
         		"\nFROM menu_item as MI" + 
-        		"\n   JOIN menu_item_has_recipe as MIHR" + 
-        		"\n   ON MI.menu_item_ID = MIHR.menu_item_ID" + 
-        		"\n   JOIN recipe as R" + 
-        		"\n   ON MIHR.recipe_ID = R.recipe_ID" + 
-        		"\n   JOIN recipe_has_ingr as RHI" + 
-        		"\n   ON R.recipe_ID = RHI.recipe_ID" + 
-        		"\n   JOIN ingredient as I" + 
-        		"\n   ON RHI.ingredient_ID = I.ingredient_ID" + 
-        		"\n   JOIN vendor_product as VP" + 
-        		"\n   ON I.ingredient_ID = VP.ingredient_ID" + 
-        		"\n   JOIN inventory as INV" + 
-        		"\n   ON VP.product_ID = INV.product_ID" + 
+        		"\n      JOIN menu_item_has_recipe as MIHR" + 
+        		"\n      ON MI.menu_item_ID = MIHR.menu_item_ID" + 
+        		"\n      JOIN recipe as R" + 
+        		"\n      ON MIHR.recipe_ID = R.recipe_ID" + 
+        		"\n      JOIN recipe_has_ingr as RHI" + 
+        		"\n      ON R.recipe_ID = RHI.recipe_ID" + 
+        		"\n      JOIN ingredient as I" + 
+        		"\n      ON RHI.ingredient_ID = I.ingredient_ID" + 
+        		"\n      JOIN vendor_product as VP" + 
+        		"\n      ON I.ingredient_ID = VP.ingredient_ID" + 
+        		"\n      JOIN inventory as INV" + 
+        		"\n      ON VP.product_ID = INV.product_ID" + 
         		"\n   JOIN restaurant_location as L" + 
         		"\n   ON INV.location_ID = L.location_ID" + 
         		"\nWHERE menu_item_name = ? AND location_name = ?" + 
@@ -102,22 +102,22 @@ public class QueryRunner {
        
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions for the menu items in menu plan 1", 
-        		"SELECT DISTINCT menu_item_name as 'Menu Item', \n   dietary_restr_name as 'Dietary Restriction' " + 
+        		"SELECT DISTINCT menu_item_name as 'Menu Item', \n      dietary_restr_name as 'Dietary Restriction' " + 
         		"\nFROM menu_plan_composition AS MPC" + 
-        		"\n   JOIN menu_item as MI" + 
-        		"\n   ON MPC.menu_item_ID = MI.menu_item_ID" + 
-        		"\n   JOIN menu_item_has_recipe as MIHR" + 
-        		"\n   ON MI.menu_item_ID = MIHR.menu_item_ID" + 
-        		"\n   JOIN recipe as R" + 
-        		"\n   ON MIHR.recipe_ID = R.recipe_ID" + 
-        		"\n   JOIN recipe_has_ingr as RHI" + 
-        		"\n   ON R.recipe_ID = RHI.recipe_ID" + 
-        		"\n   JOIN ingredient as I" + 
-        		"\n   ON RHI.ingredient_ID = I.ingredient_ID" + 
-        		"\n   JOIN ingr_has_diet_restr as IHDR" + 
-        		"\n   ON I.ingredient_ID = IHDR.ingredient_ID" + 
-        		"\n   JOIN dietary_restriction as DR" + 
-        		"\n   ON IHDR.dietary_restr_ID = DR.dietary_restr_ID" + 
+        		"\n      JOIN menu_item as MI" + 
+        		"\n      ON MPC.menu_item_ID = MI.menu_item_ID" + 
+        		"\n      JOIN menu_item_has_recipe as MIHR" + 
+        		"\n      ON MI.menu_item_ID = MIHR.menu_item_ID" + 
+        		"\n      JOIN recipe as R" + 
+        		"\n      ON MIHR.recipe_ID = R.recipe_ID" + 
+        		"\n      JOIN recipe_has_ingr as RHI" + 
+        		"\n      ON R.recipe_ID = RHI.recipe_ID" + 
+        		"\n      JOIN ingredient as I" + 
+        		"\n      ON RHI.ingredient_ID = I.ingredient_ID" + 
+        		"\n      JOIN ingr_has_diet_restr as IHDR" + 
+        		"\n      ON I.ingredient_ID = IHDR.ingredient_ID" + 
+        		"\n      JOIN dietary_restriction as DR" + 
+        		"\n      ON IHDR.dietary_restr_ID = DR.dietary_restr_ID" + 
         		"\nWHERE MPC.menu_ID = 1" + 
         		"\nORDER BY menu_item_name;", 
         		null, 
@@ -128,12 +128,12 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show all seasonal vendor products within specified time range", 
-        		"SELECT ingredient.ingredient_name as 'Ingredient', \n   vendor_product.product_id as 'Product ID',\n   " + 
-        		"vendor_product.product_season_start as 'Season Start', \n   " +
+        		"SELECT ingredient.ingredient_name as 'Ingredient', \n      vendor_product.product_id as 'Product ID',\n      " + 
+        		"vendor_product.product_season_start as 'Season Start', \n      " +
         		"vendor_product.product_season_end as 'Season End'\n" +
         		"FROM vendor_product natural join ingredient\n" + 
-        		"WHERE vendor_product.product_limited_avail = 1\n   " + 
-        		"AND vendor_product.product_season_start > ?\n   " + 
+        		"WHERE vendor_product.product_limited_avail = 1\n      " + 
+        		"AND vendor_product.product_season_start > ?\n      " + 
         		"AND vendor_product.product_season_end < ?\n" + 
         		"ORDER BY vendor_product.product_season_start;",
         		new String [] {"Start date (yyyy-mm-dd)", "End date (yyy-mm-dd)"}, 
@@ -143,16 +143,16 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show the minimum total amount of miles products need to travel to make a menu item",
-        		"SELECT recipe.recipe_id as 'Recipe ID', \n   recipe.recipe_name as 'Recipe Name', \n   " + 
-        		"sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) \n   as 'Total Min distance traveled' \n" + 
-        		"FROM menu_plan_composition natural \n   join menu_item natural \n   join menu_item_has_recipe natural \n   join recipe natural \n   join recipe_has_ingr \n   " + 
-        		"natural join ingredient \n   natural join vendor_product \n   natural join vendor " + 
-        		"WHERE (vendor_product.vendor_miles_from_source + \n   vendor.vendor_distance_miles) <= \n   " + 
-        		"(select min(vendor_product.vendor_miles_from_source \n   + vendor.vendor_distance_miles) " + 
+        		"SELECT recipe.recipe_id as 'Recipe ID', \n      recipe.recipe_name as 'Recipe Name', \n      " + 
+        		"sum(vendor_product.vendor_miles_from_source + vendor.vendor_distance_miles) \n      as 'Total Min distance traveled' \n" + 
+        		"FROM menu_plan_composition natural \n      join menu_item natural \n      join menu_item_has_recipe natural \n      join recipe natural \n      join recipe_has_ingr \n      " + 
+        		"natural join ingredient \n      natural join vendor_product \n      natural join vendor " + 
+        		"WHERE (vendor_product.vendor_miles_from_source + \n      vendor.vendor_distance_miles) <= \n      " + 
+        		"(select min(vendor_product.vendor_miles_from_source \n      + vendor.vendor_distance_miles) " + 
         		"\nFrom vendor_product natural join vendor " + 
         		"\nWHERE vendor_product.ingredient_id = ingredient.ingredient_id) " +
         		"\nGROUP BY menu_item_has_recipe.recipe_id " + 
-        		"\nORDER BY sum(vendor_product.vendor_miles_from_source + \n   vendor.vendor_distance_miles) asc",
+        		"\nORDER BY sum(vendor_product.vendor_miles_from_source + \n      vendor.vendor_distance_miles) asc",
         		null, 
         		null, 
         		false, 
@@ -161,13 +161,13 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show top selling dishes in the last month for all locations", 
-        		"SELECT menu_item.menu_item_name as 'Menu Item', \n   sum(item_quantity) as 'Total Dishes Sold'\n" + 
-        		"FROM customer_check\n   " + 
-        		"JOIN check_item\n   " + 
-        		"ON check_item.check_number \n   = customer_check.check_number\n   " + 
-        		"JOIN menu_item\n   " + 
+        		"SELECT menu_item.menu_item_name as 'Menu Item', \n      sum(item_quantity) as 'Total Dishes Sold'\n" + 
+        		"FROM customer_check\n      " + 
+        		"JOIN check_item\n      " + 
+        		"ON check_item.check_number \n      = customer_check.check_number\n      " + 
+        		"JOIN menu_item\n      " + 
         		"ON menu_item.menu_item_ID = check_item.menu_item_ID\n" + 
-        		"WHERE (customer_check.check_date >= ('2019-10-09') \n   " + 
+        		"WHERE (customer_check.check_date >= ('2019-10-09') \n      " + 
         		"AND customer_check.check_date <= '2019-11-09')\n" + 
         		"GROUP BY menu_item_name\n" + 
         		"ORDER BY sum(item_quantity) DESC;",
@@ -179,7 +179,7 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Show all dietary restrictions in database", 
-        		"SELECT	dietary_restr_ID as 'Restr. ID', \n   dietary_restr_name as 'Dietary Restriction Name' \nFROM dietary_restriction\n" +
+        		"SELECT	dietary_restr_ID as 'Restr. ID', \n      dietary_restr_name as 'Dietary Restriction Name' \nFROM dietary_restriction\n" +
         		"ORDER BY dietary_restr_ID;",
         		null,
         		null, 
@@ -189,7 +189,7 @@ public class QueryRunner {
         
         m_queryArray.add(new QueryData(
         		"Add a dietary restriction to database",
-        		"INSERT INTO dietary_restriction \n   (dietary_restr_id, dietary_restr_name) values (?,?);",
+        		"INSERT INTO dietary_restriction \n      (dietary_restr_id, dietary_restr_name) values (?,?);",
         		new String [] {"Dietary restriction ID", "Dietary restriction name"}, 
         		new boolean [] {false, false}, 
         		true, 
